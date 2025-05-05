@@ -1,0 +1,87 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Usuario {
+  id              Int              @id @default(autoincrement())
+  nome            String
+  email           String           @unique
+  senha           String
+  endereco        String
+  telefone        String
+  dataNascimento  DateTime
+  criadoEm        DateTime         @default(now())
+  atualizadoEm    DateTime         @updatedAt
+  triagens        Triagem[]
+  consultas       Consulta[]
+  historicoMedico HistoricoMedico[]
+}
+
+model Admin {
+  id            Int            @id @default(autoincrement())
+  nome          String
+  email         String         @unique
+  senha         String
+  criadoEm      DateTime       @default(now())
+  atualizadoEm  DateTime       @updatedAt
+  consultas     Consulta[]
+  historicoMedico HistoricoMedico[]
+}
+
+model Triagem {
+  id              Int         @id @default(autoincrement())
+  usuarioId       Int
+  usuario         Usuario     @relation(fields: [usuarioId], references: [id])
+  diabetico       Boolean
+  hipertenso      Boolean
+  obeso           Boolean
+  febre           Boolean
+  temperatura     Float?
+  temDor          Boolean
+  localDor        String?
+  peso            Float
+  idade           Int
+  pontuacao       Float
+  gravidade       String
+  criadoEm        DateTime    @default(now())
+  atualizadoEm    DateTime    @updatedAt
+  consultas       Consulta[]
+}
+
+model Consulta {
+  id              Int              @id @default(autoincrement())
+  usuarioId       Int
+  usuario         Usuario          @relation(fields: [usuarioId], references: [id])
+  adminId         Int
+  admin           Admin            @relation(fields: [adminId], references: [id])
+  triagemId       Int
+  triagem         Triagem          @relation(fields: [triagemId], references: [id])
+  data            DateTime
+  hora            String
+  local           String
+  especialidade   String
+  medico          String
+  confirmada      Boolean          @default(false)
+  criadoEm        DateTime         @default(now())
+  atualizadoEm    DateTime         @updatedAt
+  historicoMedico HistoricoMedico?
+}
+
+model HistoricoMedico {
+  id          Int         @id @default(autoincrement())
+  usuarioId   Int
+  usuario     Usuario     @relation(fields: [usuarioId], references: [id])
+  adminId     Int
+  admin       Admin       @relation(fields: [adminId], references: [id])
+  consultaId  Int         @unique
+  consulta    Consulta    @relation(fields: [consultaId], references: [id])
+  diagnostico String
+  conclusao   String
+  criadoEm    DateTime    @default(now())
+  atualizadoEm DateTime   @updatedAt
+}
