@@ -187,7 +187,7 @@ Esta arquitetura permite escalabilidade, manutenção simplificada e uma experi�
 ## Modelo Entidade-Relacionamento (DER)
 <div align="center"  width="70%">
 
-  ![alt text](/src/imagens/DERRRR.PNG)
+  ![alt text](/src/imagens/diagrama(DER).PNG)
 
 </div>
 
@@ -748,7 +748,7 @@ Servidor rodando na porta 3001
 
 **Toda a documentação técnica está disponível na pasta** `docs`:
 
-- 📘 [Documentação Completa. (PDF)](/src//docs/SISTEMA%20DE%20TRIAGEM%20MÉDICA.pdf)
+- 📘 [Documentação Completa. (PDF)](./src//docs/SISTEMA%20DE%20TRIAGEM%20MÉDICA.pdf)
 
 ---
 
