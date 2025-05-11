@@ -165,21 +165,21 @@ Esta arquitetura permite escalabilidade, manutenção simplificada e uma experi�
 
 <div align ="center"  width="70%">
   
-  ![alt text](/src/imagens/giagramaestrutura.PNG)
+  ![alt text](/src/imagens/DagramaEstrutura.PNG)
 </div>
 
 ## Diagrama de Casos de Uso
 
 <div align="center"  width="70%">
 
-  ![alt text](/src/imagens/casodeuso001.PNG)
+  ![alt text](/src/imagens/casoUso.PNG)
 
 </div>
 
 ## Diagrama de classe
 <div align="center"  width="70%">
 
-  ![alt text](/src/imagens/diagramadeclasse01.PNG)
+  ![alt text](/src/imagens/diagramaClasse.PNG)
 
 </div>
 
