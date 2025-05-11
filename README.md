@@ -159,38 +159,42 @@ O Sistema de Triagem Médica utiliza uma arquitetura cliente-servidor moderna, c
 Esta arquitetura permite escalabilidade, manutenção simplificada e uma experiência de usuário consistente em diferentes dispositivos.
 
 
-## Diagramas
+# Diagramas
 
 ## Diagrama de Arquitetura
 
 <div align ="center"  width="70%">
   
-  ![alt text](/src/imagens/casodeusotriagem.PNG)
+  ![alt text](/src/imagens/giagramaestrutura.PNG)
 </div>
 
-**Diagrama de Casos de Uso**
+## Diagrama de Casos de Uso
 
 <div align="center"  width="70%">
 
-  ![alt text](/src/imagens/diagramaclasse.PNG)
+  ![alt text](/src/imagens/casodeuso001.PNG)
 
 </div>
 
-**Diagrama de Sequência para Triagem**
+## Diagrama de classe
+<div align="center"  width="70%">
 
-[Imagem do Diagrama de Sequência]
+  ![alt text](/src/imagens/diagramadeclasse01.PNG)
 
-**Modelo Entidade-Relacionamento (DER)**
+</div>
+
+
+## Modelo Entidade-Relacionamento (DER)
 <div align="center"  width="70%">
 
   ![alt text](/src/imagens/DERRRR.PNG)
 
 </div>
 
-**Diagrama de Sequencia**
+## diagrama de sequencia
 <div align="center"  width="70%">
 
-  ![alt text](/src/imagens/diagramasequencia.PNG)
+  ![alt text](/src/imagens/diagramadesequencia.PNG)
 
 </div>
 
@@ -744,7 +748,7 @@ Servidor rodando na porta 3001
 
 **Toda a documentação técnica está disponível na pasta** `docs`:
 
-- 📘 [Documentação Completa. (PDF)](docs/documentação.pdf)
+- 📘 [Documentação Completa. (PDF)](/src//docs/SISTEMA%20DE%20TRIAGEM%20MÉDICA.pdf)
 
 ---
 

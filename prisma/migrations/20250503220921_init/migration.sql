@@ -1,5 +1,5 @@
 -- CreateTable
-CREATE TABLE "Usuario" (
+    CREATE TABLE "Usuario" (
     "id" SERIAL NOT NULL,
     "nome" TEXT NOT NULL,
     "email" TEXT NOT NULL,
@@ -14,7 +14,7 @@ CREATE TABLE "Usuario" (
 );
 
 -- CreateTable
-CREATE TABLE "Admin" (
+    CREATE TABLE "Admin" (
     "id" SERIAL NOT NULL,
     "nome" TEXT NOT NULL,
     "email" TEXT NOT NULL,
@@ -26,7 +26,7 @@ CREATE TABLE "Admin" (
 );
 
 -- CreateTable
-CREATE TABLE "Triagem" (
+    CREATE TABLE "Triagem" (
     "id" SERIAL NOT NULL,
     "usuarioId" INTEGER NOT NULL,
     "diabetico" BOOLEAN NOT NULL,
@@ -47,7 +47,7 @@ CREATE TABLE "Triagem" (
 );
 
 -- CreateTable
-CREATE TABLE "Consulta" (
+    CREATE TABLE "Consulta" (
     "id" SERIAL NOT NULL,
     "usuarioId" INTEGER NOT NULL,
     "adminId" INTEGER NOT NULL,
@@ -65,7 +65,7 @@ CREATE TABLE "Consulta" (
 );
 
 -- CreateTable
-CREATE TABLE "HistoricoMedico" (
+    CREATE TABLE "HistoricoMedico" (
     "id" SERIAL NOT NULL,
     "usuarioId" INTEGER NOT NULL,
     "adminId" INTEGER NOT NULL,
