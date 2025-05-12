@@ -15,18 +15,21 @@
 
 ---
 
-## ✨ Visão Geral
+# ✨ Visão Geral
 
 O **Sistema de Triagem Médica** é uma aplicação web completa desenvolvida para modernizar o processo de triagem em ambientes de saúde. Este sistema foi projetado para otimizar o fluxo de atendimento médico, permitindo uma avaliação inicial dos pacientes baseada em seus sintomas e condições de saúde.
 
 O processo inicia-se com o preenchimento de um formulário de triagem pelo paciente, onde são coletadas informações sobre suas condições prévias, como:
 
-- Status de obesidade, hipertensão ou diabetes
-- Presença de febre e temperatura corporal
-- Presença, localização e intensidade de dor
-- Alergias conhecidas
-- Medicamentos em uso
-- Dados biométricos (peso e idade)
+ ✅ Status de obesidade, hipertensão ou diabetes.
+
+ ✅ Presença de febre e temperatura corporal.
+
+ ✅ Presença, localização e intensidade de dor.
+
+ ✅ Medicamentos em uso.
+
+ ✅ Dados biométricos (peso e idade)
 
 Após o preenchimento do formulário, o sistema implementa uma lógica de classificação que analisa os dados fornecidos e determina a gravidade do caso do paciente. Com base nesta avaliação, o sistema estabelece uma prioridade de atendimento, permitindo que o responsável pela gestão dos agendamentos visualize o resultado de todas as triagens e organize as consultas de acordo com a urgência de cada caso.
 
@@ -34,9 +37,11 @@ Quando o agendamento é concluído, o paciente pode visualizá-lo ao fazer login
 
 A solução proporciona uma interface intuitiva que permite a avaliação preliminar automatizada e o acompanhamento de todo o processo, desde a triagem até o atendimento médico e seu histórico clínico. O sistema categoriza os casos por gravidade (crítica, grave ou leve), facilitando a priorização do atendimento e a alocação eficiente de recursos médicos.
 
-### 💡 Objetivos
+---
 
-O Sistema de Triagem Médica tem como principais objetivos:
+# 💡 Objetivos
+
+### ***O Sistema de Triagem Médica tem como principais objetivos:***
 
 - Automatizar o processo de triagem médica, reduzindo o tempo de espera dos pacientes
 - Otimizar o agendamento de consultas baseado na gravidade dos casos
@@ -46,10 +51,11 @@ O Sistema de Triagem Médica tem como principais objetivos:
 - Proporcionar uma experiência intuitiva para todos os usuários do sistema
 - Reduzir a sobrecarga administrativa das equipes de saúde
 - Melhorar a qualidade do atendimento através da priorização adequada de casos
+---
 
-### 🎯 Público-alvo
+# 🎯 Público-alvo
 
-O sistema foi desenvolvido para atender às necessidades de:
+### ***O sistema foi desenvolvido para atender às necessidades de:***
 
 - **Pacientes:** Que necessitam de avaliação médica e desejam um processo simplificado de triagem e agendamento
 - **Administradores do sistema:** Responsáveis por gerenciar o fluxo de atendimento, agendamentos e registros médicos
@@ -57,9 +63,12 @@ O sistema foi desenvolvido para atender às necessidades de:
 - **Gestores de instituições de saúde:** Interessados em otimizar recursos e melhorar a eficiência operacional
 - **Equipe de recepção e acolhimento:** Responsáveis pelo primeiro contato com pacientes e organização do fluxo de atendimento
 
-## 🏛️ Arquitetura do Sistema
 
-### 🔍 Visão Geral da Arquitetura
+---
+
+# 🏛️ Arquitetura do Sistema
+
+### ***🔍 Visão Geral da Arquitetura***
 
 O Sistema de Triagem Médica utiliza uma arquitetura cliente-servidor moderna, com separação clara entre frontend e backend:
 
@@ -70,15 +79,16 @@ O Sistema de Triagem Médica utiliza uma arquitetura cliente-servidor moderna, c
 
 Esta arquitetura permite escalabilidade, manutenção simplificada e uma experiência de usuário consistente em diferentes dispositivos.
 
+---
+
 ## 📋 Requisitos do Sistema
 
-### - Requisitos Funcionais
+### ***- Requisitos Funcionais***
 
 **RF001 - Autenticação de Usuários**
 - O sistema deve permitir o cadastro de novos usuários (pacientes)
 - O sistema deve autenticar usuários através de e-mail e senha
 - O sistema deve implementar diferentes níveis de acesso (paciente e administrador)
-- O sistema deve permitir recuperação de senha
 
 **RF002 - Triagem Automatizada**
 - O sistema deve apresentar formulário para coleta de informações de saúde
@@ -90,7 +100,7 @@ Esta arquitetura permite escalabilidade, manutenção simplificada e uma experi�
 - O sistema deve permitir que administradores visualizem todas as triagens
 - O sistema deve sugerir prioridades baseadas na gravidade das triagens
 - O sistema deve permitir agendamento de consultas com definição de data, hora, local e médico
-- O sistema deve notificar pacientes sobre consultas agendadas
+- O sistema deve notificar pacientes sobre consultas agendadas ao efetuar o seu login
 
 **RF004 - Confirmação de Presença**
 - O sistema deve exibir consultas agendadas para o paciente autenticado
@@ -104,50 +114,50 @@ Esta arquitetura permite escalabilidade, manutenção simplificada e uma experi�
 - O sistema deve permitir pesquisa e filtro de registros históricos
 
 **RF006 - Notificações**
-- O sistema deve enviar notificações sobre consultas agendadas
 - O sistema deve alertar administradores sobre casos críticos
-- O sistema deve enviar lembretes de consultas próximas
-- O sistema deve notificar sobre alterações em agendamentos
+- O sistema deve mostrar as consultas próximas
 
-### - Requisitos Não Funcionais
+---
+
+### ***- Requisitos Não Funcionais***
 
 **RNF001 - Usabilidade**
 - A interface deve ser intuitiva e acessível para todos os perfis de usuários
 - O sistema deve ser responsivo e adaptável a diferentes tamanhos de tela
 - O tempo médio para completar a triagem não deve exceder 5 minutos
-- O sistema deve seguir padrões de acessibilidade WCAG 2.1 nível AA
+- O sistema deve seguir padrões de acessibilidade
 
 **RNF002 - Segurança**
-- Todas as senhas devem ser armazenadas utilizando algoritmos de hash seguros (Bcrypt)
+- Todas as senhas devem ser armazenadas utilizando tokens
 - A comunicação entre cliente e servidor deve ser criptografada (HTTPS)
-- O sistema deve implementar proteção contra ataques comuns (XSS, CSRF, SQL Injection)
 - Os tokens de autenticação devem expirar em 24 horas
 
 **RNF003 - Desempenho**
 - O tempo de resposta para operações regulares não deve exceder 2 segundos
-- O sistema deve suportar até 1000 usuários simultâneos
+- O sistema deve suportar até 100 usuários simultâneos
 - O tempo de carregamento inicial não deve exceder 3 segundos em conexões 4G
 - As consultas ao banco de dados devem ser otimizadas para evitar gargalos
 
 **RNF004 - Escalabilidade**
-- A arquitetura deve permitir adição de novos servidores sem modificação do código
-- O banco de dados deve ser dimensionado para suportar crescimento de 50% ao ano
+- O banco de dados deve ser dimensionado para suportar crescimento de ate 50% ao ano
 - O sistema deve ser modular para permitir expansão de funcionalidades
 
 **RNF005 - Disponibilidade**
 - O sistema deve estar disponível 99,9% do tempo (downtime máximo de 8,76 horas/ano)
 - Manutenções programadas devem ocorrer fora do horário comercial
-- O sistema deve implementar mecanismos de recuperação automática após falhas
+
 
 **RNF006 - Compatibilidade**
 - O sistema deve funcionar nos navegadores Chrome, Firefox, Safari e Edge (duas versões mais recentes)
 - A interface deve ser responsiva para dispositivos móveis, tablets e desktops
-- O sistema deve ser compatível com leitor de tela para deficientes visuais
 
 
-## 🏛️ Arquitetura do Sistema
+---
 
-### 🔎 Visão Geral da Arquitetura
+
+# 🏛️ Arquitetura do Sistema
+
+### ***🔎 Visão Geral da Arquitetura***
 
 O Sistema de Triagem Médica utiliza uma arquitetura cliente-servidor moderna, com separação clara entre frontend e backend:
 
@@ -158,17 +168,17 @@ O Sistema de Triagem Médica utiliza uma arquitetura cliente-servidor moderna, c
 
 Esta arquitetura permite escalabilidade, manutenção simplificada e uma experiência de usuário consistente em diferentes dispositivos.
 
-
+---
 # Diagramas
 
-## Diagrama de Arquitetura
+## ***Diagrama de Arquitetura***
 
 <div align ="center"  width="70%">
   
   ![alt text](/src/imagens/DagramaEstrutura.PNG)
 </div>
 
-## Diagrama de Casos de Uso
+## ***Diagrama de Casos de Uso***
 
 <div align="center"  width="70%">
 
@@ -176,7 +186,7 @@ Esta arquitetura permite escalabilidade, manutenção simplificada e uma experi�
 
 </div>
 
-## Diagrama de classe
+## ***Diagrama de classe***
 <div align="center"  width="70%">
 
   ![alt text](/src/imagens/diagramaClasse.PNG)
@@ -184,14 +194,14 @@ Esta arquitetura permite escalabilidade, manutenção simplificada e uma experi�
 </div>
 
 
-## Modelo Entidade-Relacionamento (DER)
+## ***Modelo Entidade-Relacionamento (DER)***
 <div align="center"  width="70%">
 
   ![alt text](/src/imagens/diagramaDER.PNG)
 
 </div>
 
-## diagrama de sequencia
+## ***diagrama de sequencia***
 <div align="center"  width="70%">
 
   ![alt text](/src/imagens/diagramadesequencia.PNG)
@@ -204,7 +214,7 @@ Esta arquitetura permite escalabilidade, manutenção simplificada e uma experi�
 
 ## 🛠️ Stack Tecnológica
 
-### Frontend
+### ***Frontend***
 <p>
   <img src="https://img.shields.io/badge/React-20232A?style=for-the-badge&logo=react&logoColor=61DAFB" alt="React"/>
   <img src="https://img.shields.io/badge/Vite-B73BFE?style=for-the-badge&logo=vite&logoColor=FFD62E" alt="Vite"/>
@@ -218,11 +228,13 @@ Esta arquitetura permite escalabilidade, manutenção simplificada e uma experi�
   <img src="https://img.shields.io/badge/JWT-000000?style=for-the-badge&logo=JSON%20web%20tokens&logoColor=white" alt="JWT"/>
 </p>
 
+---
+
 # Dicionário de Dados
 
-## Tabela: Usuario
+## ***Tabela: Usuario***
 
-**Armazena informações dos usuários do sistema.**
+***Armazena informações dos usuários do sistema.***
 
 | **Campo** | **Tipo** | **Descrição** | **Restrições** |
 |-------|------|-----------|------------|
@@ -236,9 +248,9 @@ Esta arquitetura permite escalabilidade, manutenção simplificada e uma experi�
 | criadoEm | TIMESTAMP | Data e hora da criação do registro | Não nulo, Valor padrão: data/hora atual |
 | atualizadoEm | TIMESTAMP | Data e hora da última atualização | Não nulo |
 
-## Tabela: Admin
+## ***Tabela: Admin***
 
-**Armazena informações dos administradores do sistema.**
+***Armazena informações dos administradores do sistema.***
 
 | **Campo** | **Tipo** | **Descrição** | **Restrições** |
 |-------|------|-----------|------------|
@@ -249,9 +261,9 @@ Esta arquitetura permite escalabilidade, manutenção simplificada e uma experi�
 | criadoEm | TIMESTAMP | Data e hora da criação do registro | Não nulo, Valor padrão: data/hora atual |
 | atualizadoEm | TIMESTAMP | Data e hora da última atualização | Não nulo |
 
-## Tabela: Triagem
+## ***Tabela: Triagem***
 
-**Armazena informações sobre as triagens realizadas para os usuários.**
+***Armazena informações sobre as triagens realizadas para os usuários.***
 
 | **Campo** | **Tipo** | **Descrição** | **Restrições** |
 |-------|------|-----------|------------|
@@ -271,9 +283,9 @@ Esta arquitetura permite escalabilidade, manutenção simplificada e uma experi�
 | criadoEm | TIMESTAMP | Data e hora da criação do registro | Não nulo, Valor padrão: data/hora atual |
 | atualizadoEm | TIMESTAMP | Data e hora da última atualização | Não nulo |
 
-## Tabela: Consulta
+## ***Tabela: Consulta***
 
-**Armazena informações sobre as consultas médicas.**
+***Armazena informações sobre as consultas médicas.***
 
 | **Campo** | **Tipo** | **Descrição** | **Restrições** |
 |-------|------|-----------|------------|
@@ -290,9 +302,9 @@ Esta arquitetura permite escalabilidade, manutenção simplificada e uma experi�
 | criadoEm | TIMESTAMP | Data e hora da criação do registro | Não nulo, Valor padrão: data/hora atual |
 | atualizadoEm | TIMESTAMP | Data e hora da última atualização | Não nulo |
 
-## Tabela: HistoricoMedico
+## ***Tabela: HistoricoMedico***
 
-**Armazena informações sobre o histórico médico dos usuários.**
+***Armazena informações sobre o histórico médico dos usuários.***
 
 | **Campo** | **Tipo** | **Descrição** | **Restrições** |
 |-------|------|-----------|------------|
@@ -305,70 +317,68 @@ Esta arquitetura permite escalabilidade, manutenção simplificada e uma experi�
 | criadoEm | TIMESTAMP | Data e hora da criação do registro | Não nulo, Valor padrão: data/hora atual |
 | atualizadoEm | TIMESTAMP | Data e hora da última atualização | Não nulo |
 
-## 🔗 Relacionamentos
+---
+# 🔗 Relacionamentos
 
-### Triagem → Usuario
+### ***Triagem → Usuario***
 - Uma triagem pertence a um usuário específico
 - Um usuário pode ter múltiplas triagens
 
-### Consulta → Usuario
+### ***Consulta → Usuario***
 - Uma consulta pertence a um usuário específico
 - Um usuário pode ter múltiplas consultas
 
-### Consulta → Admin
+### ***Consulta → Admin***
 - Uma consulta é gerenciada por um administrador específico
 - Um administrador pode gerenciar múltiplas consultas
 
-### Consulta → Triagem
+### ***Consulta → Triagem***
 - Uma consulta está associada a uma triagem específica
 - Uma triagem pode resultar em uma consulta
 
-### HistoricoMedico → Usuario
+### ***HistoricoMedico → Usuario***
 - Um histórico médico pertence a um usuário específico
 - Um usuário pode ter múltiplos históricos médicos
 
-### HistoricoMedico → Admin
+### ***HistoricoMedico → Admin***
 - Um histórico médico é registrado por um administrador específico
 - Um administrador pode registrar múltiplos históricos médicos
 
-### HistoricoMedico → Consulta
+### ***HistoricoMedico → Consulta***
 - Um histórico médico está associado a uma consulta específica
 - Uma consulta gera apenas um histórico médico (relacionamento 1:1)
 
+---
 
-## 🛠️ Funcionalidades do Sistema
+# 🛠️ Funcionalidades do Sistema
 
-### ⚙️ Gestão de Usuários
+## ⚙️ Gestão de Usuários
 
-O módulo de Gestão de Usuários permite:
+***O módulo de Gestão de Usuários permite:***
 
 **1. Cadastro de Novos Usuários**
 - Formulário completo para captação de dados pessoais
 - Validação de informações em tempo real
 - Criação de credenciais de acesso seguras
-- Confirmação por e-mail
+
 
 **2. Autenticação**
 - Login seguro com verificação de credenciais
 - Diferenciação entre perfis de acesso (paciente/administrador)
-- Recuperação de senha via e-mail
-- Bloqueio após múltiplas tentativas incorretas
 
 **3. Gestão de Perfil**
-- Visualização e edição de informações pessoais
-- Atualização de dados de contato
 - Gerenciamento de preferências de notificação
 - Visualização de histórico de atividades
 
 **4. Controle de Acesso**
 - Permissionamento baseado em perfis
 - Acesso restrito a funcionalidades administrativas
-- Registro de logs de atividades
 - Auditoria de ações sensíveis
+---
 
-### ⚙️ Processo de Triagem
+## ⚙️ Processo de Triagem
 
-O módulo de Triagem automatiza a avaliação inicial de pacientes:
+***O módulo de Triagem automatiza a avaliação inicial de pacientes:***
 
 **1. Coleta de Informações**
 - Questionário estruturado sobre condições de saúde:
@@ -396,9 +406,11 @@ O módulo de Triagem automatiza a avaliação inicial de pacientes:
 - Tempo médio entre triagem e atendimento
 - Relatórios exportáveis para análise
 
-### ⚙️ Agendamento de Consultas
+---
 
-O módulo de Agendamento gerencia o processo de marcação de consultas:
+## ⚙️ Agendamento de Consultas
+
+***O módulo de Agendamento gerencia o processo de marcação de consultas:**
 
 **1. Criação de Agendamentos**
 - Interface administrativa para definição de:
@@ -406,8 +418,6 @@ O módulo de Agendamento gerencia o processo de marcação de consultas:
   - Local de atendimento
   - Especialidade médica
   - Profissional responsável
-- Verificação de disponibilidade em tempo real
-- Prevenção de conflitos de agenda
 
 **2. Priorização Baseada em Triagem**
 - Sugestão automática de prioridade conforme gravidade
@@ -418,24 +428,21 @@ O módulo de Agendamento gerencia o processo de marcação de consultas:
 **3. Notificação ao Paciente**
 - Comunicação automática sobre detalhes do agendamento
 - Solicitação de confirmação de presença
-- Lembretes próximos à data da consulta
-- Opções para reagendamento, se necessário
 
 **4. Confirmação de Comparecimento**
 - Interface para que o paciente confirme sua presença
 - Registro da confirmação no sistema
 - Alerta para administradores sobre confirmações pendentes
-- Gerenciamento de ausências e reagendamentos
 
 **5. Gerenciamento de Agenda**
 - Visualização de calendário com todas as consultas
-- Filtros por médico, especialidade ou período
-- Detecção de sobrecarga de agenda
 - Ajustes em tempo real quando necessário
 
-### ⚙️ Histórico Médico
+---
 
-O módulo de Histórico Médico mantém o registro completo de atendimentos:
+## ⚙️ Histórico Médico
+
+***O módulo de Histórico Médico mantém o registro completo de atendimentos:***
 
 **1. Registro Pós-Consulta**
 - Interface para administradores registrarem:
@@ -453,10 +460,7 @@ O módulo de Histórico Médico mantém o registro completo de atendimentos:
 - Visualização de evolução do quadro de saúde
 
 **3. Pesquisa e Filtros**
-- Busca por data, especialidade ou diagnóstico
 - Filtros para visualização específica de informações
-- Exportação de relatórios em diferentes formatos
-- Compartilhamento seguro com outros profissionais quando necessário
 
 **4. Privacidade e Segurança**
 - Acesso restrito apenas ao próprio paciente e profissionais autorizados
@@ -464,8 +468,9 @@ O módulo de Histórico Médico mantém o registro completo de atendimentos:
 - Criptografia de dados sensíveis
 - Conformidade com legislações de proteção de dados
 
+---
 
-### 🛢️ Banco de Dados
+## 🛢️ Banco de Dados
 <p>
   <img src="https://img.shields.io/badge/PostgreSQL-316192?style=for-the-badge&logo=postgresql&logoColor=white" alt="PostgreSQL"/>
   <img src="https://img.shields.io/badge/pgAdmin-4-F80000?style=for-the-badge&logo=postgresql&logoColor=white" alt="pgAdmin"/>
@@ -476,11 +481,11 @@ O módulo de Histórico Médico mantém o registro completo de atendimentos:
 ---
 
 
-## 🏛️ Estrutura do Banco de Dados
+# 🏛️ Estrutura do Banco de Dados
 
-**O arquivo de migração criará as seguintes tabelas:**
+***O arquivo de migração criará as seguintes tabelas:***
 
-## Tabela: Usuario
+## ***Tabela: Usuario***
 
 ```sql
     CREATE TABLE "Usuario" (
@@ -498,7 +503,7 @@ O módulo de Histórico Médico mantém o registro completo de atendimentos:
 );
 ```
 
-## Tabela: Admin
+## ***Tabela: Admin***
 
 ```sql
     CREATE TABLE "Admin" (
@@ -513,7 +518,7 @@ O módulo de Histórico Médico mantém o registro completo de atendimentos:
 );
 ```
 
-## Tabela: Triagem
+## ***Tabela: Triagem***
 
 ```sql
     CREATE TABLE "Triagem" (
@@ -537,7 +542,7 @@ O módulo de Histórico Médico mantém o registro completo de atendimentos:
 );
 ```
 
-## Tabela: Consulta
+## ***Tabela: Consulta***
 
 ```sql
     CREATE TABLE "Consulta" 
@@ -557,7 +562,7 @@ O módulo de Histórico Médico mantém o registro completo de atendimentos:
     CONSTRAINT "Consulta_pkey" PRIMARY KEY ("id")
 ```
 
-## Tabela: HistoricoMedico
+## ***Tabela: HistoricoMedico***
 
 ```sql
     CREATE TABLE "HistoricoMedico" (
@@ -574,7 +579,7 @@ O módulo de Histórico Médico mantém o registro completo de atendimentos:
 );
 ```
 
-## Índices e Chaves Estrangeiras
+## ***Índices e Chaves Estrangeiras***
 
 ```sql
 -- Índices únicos
@@ -607,44 +612,48 @@ ALTER TABLE "HistoricoMedico" ADD CONSTRAINT "HistoricoMedico_consultaId_fkey"
 FOREIGN KEY ("consultaId") REFERENCES "Consulta"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 ```
 
-## 🛠️ Configuração e Instalação
+# 🛠️ Configuração e Instalação
 
-## Pré-requisitos
+## ***Pré-requisitos***
 
 - Node.js ≥ 18.x
 - PostgreSQL ≥ 13.x
 - PgAdimin4
 - Git
 
-## 💾Guia de Instalação - Sistema de Triagem Médica
+---
 
-Este guia apresenta os passos necessários para instalar e configurar o Sistema de Triagem Médica.
+# 💾Guia de Instalação - Sistema de Triagem Médica
 
-## 🔧 Requisitos Prévios
+***Este guia apresenta os passos necessários para instalar e configurar o Sistema de Triagem Médica.***
+---
+# 🔧 Requisitos Prévios
 
 - Node.js e npm
 - PostgreSQL
 - pgAdmin 4
 - Git
 
-## 🔨 Passo a Passo de Instalação
+---
 
-## Clone o Repositório
+# 🔨 Passo a Passo de Instalação
+
+## ***Clone o Repositório***
 
 ```bash
 git clone https://github.com/seu-usuario/sistema-triagem-medica.git
 cd sistema-triagem-medica
 ```
 
-## Instale as Dependências
+## ***Instale as Dependências***
 
 ```bash
 npm install
 ```
 
-## Configure o Ambiente
+## ***Configure o Ambiente***
 
-Crie um arquivo `.env` na raiz do projeto com o seguinte conteúdo:
+*Crie um arquivo `.env` na raiz do projeto com o seguinte conteúdo:*
 
 ```
 DATABASE_URL="postgresql://postgres:sua_senha@localhost:5432/triagem_medica?schema=public"
@@ -652,19 +661,20 @@ JWT_SECRET="sua_chave_super_secreta"
 ```
 
 > **Importante**: Substitua `sua_senha` e `sua_chave_super_secreta` pelos valores adequados ao seu ambiente.
+---
 
-## 🛠️ Configure o Banco de Dados com pgAdmin 4
+# 🛠️ Configure o Banco de Dados com pgAdmin 4
 
-1.  **Abra o pgAdmin 4**
+1.  ***Abra o pgAdmin 4***
 
-2. **Registre um Novo Servidor**
+2. ***Registre um Novo Servidor***
    - Clique com o botão direito em "Servidores"
    - Selecione "Registrar" e depois "Servidor"
 
-3. **Configure a Aba "Geral"**
+3. ***Configure a Aba "Geral"***
    - Nome: `triagem_medica`
 
-4. **Configure a Aba "Conexão"**
+4. ***Configure a Aba "Conexão"***
    - Host: `localhost`
    - Porta: `5432`
    - Banco de dados de manutenção: `postgres`
@@ -672,14 +682,16 @@ JWT_SECRET="sua_chave_super_secreta"
    - Senha: `sua_senha`
    - Clique em "Salvar"
 
-5. **Crie um Novo Banco de Dados**
+5. ***Crie um Novo Banco de Dados***
    - No servidor recém-criado, clique com o botão direito em "Bancos de Dados"
    - Selecione "Criar" e depois "Banco de Dados"
    - Nome do banco de dados: `triagem_medica`
    - Proprietário: `postgres`
    - Clique em "Salvar"
 
-## 🛠️ Configure o Prisma e Realize a Migração do Banco
+---
+
+# 🛠️ Configure o Prisma e Realize a Migração do Banco
 
 ```bash
 npx prisma migrate
@@ -696,14 +708,14 @@ migrations/
 
 
 
-## 🔑 Inicie o Servidor FontEnd:
+## ***🔑 Inicie o Servidor FontEnd:***
 
 ```bash
 npm run dev
 
 http://localhost:5173 "ou outra porta".
 ```
-## 🔨 Inicie o Servidor BeckEnd:
+## ***🔨 Inicie o Servidor BeckEnd:***
 ```bash
 npm run server
 
@@ -712,49 +724,51 @@ Servidor rodando na porta 3001
 
 
 
-## ⚙️ Prisma Studio (GUI para gerenciamento do banco de dados)
+## ***⚙️ Prisma Studio (GUI para gerenciamento do banco de dados)***
   ```bash
   npx prisma studio
   Acesse em: `http://localhost:5555`
 
   ```
 
-## 📱 Demonstração
+# 📱 Demonstração
 
-# Principais Telas
+## ***Principais Telas***
 
-## Visualização das Telas
+## ***Visualização das Telas***
 
-| Tela Inicial | Paciente | Administrador |
+| *Tela Inicial* | *Paciente* | *Administrador* |
 |:------------:|:-------:|:---------:|
-| ![Tela Inicial 1](./src/imagens/login01.PNG) | ![Paciente 1](./src/imagens/44787.PNG) | ![Administrador 1](./src/imagens/admin01.PNG) |
-| ![Tela Inicial 2](./src/imagens/login02.PNG) | ![Paciente 2](./src/imagens/user01.PNG) | ![Administrador 2](./src/imagens/admin02.PNG) |
-| ![Tela Inicial 3](./src/imagens/cadastrar.PNG) | ![Paciente 3](./src/imagens/user02.PNG) | ![Administrador 3](./src/imagens/admin03.PNG) |
-| ![Tela Inicial 4](./src/imagens/login02.PNG) | ![Paciente 4](./src/imagens/user03.PNG) | ![Administrador 4](./src/imagens/admin04.PNG) |
-| ![Tela Inicial 5](./src/imagens/login02.PNG) | ![Paciente 5](./src/imagens/user04.PNG) | ![Administrador 5](./src/imagens/admin05.PNG) |
-| ![Tela Inicial 6](./src/imagens/login02.PNG) | ![Paciente 6](./src/imagens/user05.PNG) | ![Administrador 6](./src/imagens/admin06.PNG) |
-### Fluxo de Utilização
+| ![Tela Inicial 1](./src/imagens/loginpacente.PNG) | ![Paciente 1](./src/imagens/44787.PNG) | ![Administrador 1](./src/imagens/admin01.PNG) |
+| ![Tela Inicial 2](./src/imagens/loginadmin.PNG) | ![Paciente 2](./src/imagens/user01.PNG) | ![Administrador 2](./src/imagens/admin02.PNG) |
+| ![Tela Inicial 3](./src/imagens/cadastro01.PNG) | ![Paciente 3](./src/imagens/user02.PNG) | ![Administrador 3](./src/imagens/admin03.PNG) |
+| ![Tela Inicial 4](./src/imagens/loginadmin.PNG) | ![Paciente 4](./src/imagens/user03.PNG) | ![Administrador 4](./src/imagens/admin04.PNG) |
+| ![Tela Inicial 5](./src/imagens/loginpacente.PNG) | ![Paciente 5](./src/imagens/user04.PNG) | ![Administrador 5](./src/imagens/admin05.PNG) |
+| ![Tela Inicial 6](./src/imagens/cadastro01.PNG) | ![Paciente 6](./src/imagens/user05.PNG) | ![Administrador 6](./src/imagens/admin06.PNG) |
 
-1. **Login no Sistema**
-2. **Preenchimento da Triagem**
+
+## ***Fluxo de Utilização***
+
+1. ***Login no Sistema***
+2. ***Preenchimento da Triagem***
    - Informação de sintomas e condições de saúde
    - Cálculo automático da gravidade
-3. **Visualização de Consultas Agendadas**
-4. **Acesso ao Histórico Médico**
+3. ***Visualização de Consultas Agendadas***
+4. ***Acesso ao Histórico Médico***
 
 ---
 
-## 📚 Documentação
+# 📚 Documentação
 
-**Toda a documentação técnica está disponível na pasta** `docs`:
+***Toda a documentação técnica está disponível na pasta*** `docs`:
 
-- 📘 [Documentação Completa. (PDF)](./src/docs/SISTEMA_DE_TRIAGEM_MÉDICA.pdf)
+- 📘 [Documentação Completa. (PDF)](./src/docs/Documentação_sitema_de_triagem.pdf)
 
 ---
 
-## 🤝 Contribuição
+# 🤝 Contribuição
 
-**Contribuições são sempre bem-vindas! Para contribuir:**
+***Contribuições são sempre bem-vindas! Para contribuir:***
 
 1. Faça um Fork do projeto
 2. Crie uma branch para sua feature (`git checkout -b feature/nova-funcionalidade`)
@@ -764,7 +778,7 @@ Servidor rodando na porta 3001
 
 ---
 
-## 👨‍💻 Desenvolvedor
+# 👨‍💻 Desenvolvedor
 
 <div align="center">
   <table>
