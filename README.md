@@ -197,7 +197,7 @@ Esta arquitetura permite escalabilidade, manutenção simplificada e uma experi�
 ## ***Modelo Entidade-Relacionamento (DER)***
 <div align="center"  width="70%">
 
-  ![alt text](/src/imagens/diagramaDER.PNG)
+  ![alt text](/src/imagens/diagramaDer.PNG)
 
 </div>
 
@@ -641,8 +641,8 @@ FOREIGN KEY ("consultaId") REFERENCES "Consulta"("id") ON DELETE RESTRICT ON UPD
 ## ***Clone o Repositório***
 
 ```bash
-git clone https://github.com/seu-usuario/sistema-triagem-medica.git
-cd sistema-triagem-medica
+git clone https://github.com/valdeircesario/MedTriagem.git
+
 ```
 
 ## ***Instale as Dependências***
@@ -739,7 +739,7 @@ Servidor rodando na porta 3001
 
 | *Tela Inicial* | *Paciente* | *Administrador* |
 |:------------:|:-------:|:---------:|
-| ![Tela Inicial 1](./src/imagens/loginpacente.PNG) | ![Paciente 1](./src/imagens/44787.PNG) | ![Administrador 1](./src/imagens/admin01.PNG) |
+| ![Tela Inicial 1](./src/imagens/loginpacente.PNG) | ![Paciente 1](./src/imagens/telaInicial.PNG) | ![Administrador 1](./src/imagens/admin01.PNG) |
 | ![Tela Inicial 2](./src/imagens/loginadmin.PNG) | ![Paciente 2](./src/imagens/user01.PNG) | ![Administrador 2](./src/imagens/admin02.PNG) |
 | ![Tela Inicial 3](./src/imagens/cadastro01.PNG) | ![Paciente 3](./src/imagens/user02.PNG) | ![Administrador 3](./src/imagens/admin03.PNG) |
 | ![Tela Inicial 4](./src/imagens/loginadmin.PNG) | ![Paciente 4](./src/imagens/user03.PNG) | ![Administrador 4](./src/imagens/admin04.PNG) |

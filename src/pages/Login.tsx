@@ -50,7 +50,7 @@ const Login = () => {
       <div className="w-full max-w-md space-y-8">
         <div className="text-center">
           <div className="flex justify-center">
-            <img src="/src/imagens/011.PNG" alt="Logo" className="h-14 w-15" />
+            <img src="/src/imagens/logo.PNG" alt="Logo" className="h-14 w-15" />
   
             
           </div>
@@ -95,7 +95,6 @@ const Login = () => {
           <form className="space-y-6" onSubmit={handleSubmit}>
             <Input
               id="email"
-
               name="email"
               type="email"
               label="E-mail"
@@ -132,7 +131,7 @@ const Login = () => {
             </div>
           </form>
 
-                    {(tipoUsuario === 'usuario' || tipoUsuario === 'admin') && (
+          {tipoUsuario === 'usuario' && (
             <div className="mt-6 text-center">
               <p className="text-sm text-gray-600">
                 Não tem uma conta?{' '}
