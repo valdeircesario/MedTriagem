@@ -745,11 +745,11 @@ Servidor rodando na porta 3001
 
 | *Tela Inicial* | *Paciente* | *Administrador* |
 |:------------:|:-------:|:---------:|
-| ![Tela Inicial 1](/src/imagens/login01.png) | ![Paciente 1](/src/imagens/user01.png) | ![Administrador 1](/src/imagens/admin01.png) |
-| ![Tela Inicial 2](/src/imagens/cadastro.png) | ![Paciente 2](/src/imagens/user02.png) | ![Administrador 2](/src/imagens/admin02.png) |
-| ![Tela Inicial 3](/src/imagens/recuperarsenha.png) | ![Paciente 3](/src/imagens/user03.png) | ![Administrador 3](/src/imagens/admin03.png) |
-| ![Tela Inicial 4](/src/imagens/login01.png) | ![Paciente 4](/src/imagens/user05.png) | ![Administrador 4](/src/imagens/user06.png) |
-| ![Tela Inicial 5](/src/imagens/user07.png) | ![Paciente 5](/src/imagens/user08.png) | ![Administrador 5](/src/imagens/admin03.png) |
+| ![Tela Inicial 1](./src/imagens/login01.png) | ![Paciente 1](./src/imagens/user01.png) | ![Administrador 1](./src/imagens/admin01.png) |
+| ![Tela Inicial 2](./src/imagens/cadastro.png) | ![Paciente 2](./src/imagens/user02.png) | ![Administrador 2](./src/imagens/admin02.png) |
+| ![Tela Inicial 3](./src/imagens/recuperarsenha.png) | ![Paciente 3](./src/imagens/user03.png) | ![Administrador 3](./src/imagens/admin03.png) |
+| ![Tela Inicial 4](./src/imagens/login01.png) | ![Paciente 4](./src/imagens/user05.png) | ![Administrador 4](./src/imagens/user06.png) |
+| ![Tela Inicial 5](./src/imagens/user07.png) | ![Paciente 5](./src/imagens/user08.png) | ![Administrador 5](./src/imagens/admin03.png) |
 
 
 
