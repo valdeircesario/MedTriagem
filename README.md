@@ -189,7 +189,7 @@ Esta arquitetura permite escalabilidade, manutenção simplificada e uma experi�
 ## ***Diagrama de classe***
 <div align="center"  width="70%">
 
-  ![alt text](/src/imagens/DiagramaClasse.png)
+  ![alt text](/src/imagens/diagramadeclasse01.PNG)
 
 </div>
 
