@@ -175,21 +175,21 @@ Esta arquitetura permite escalabilidade, manutenção simplificada e uma experi�
 
 <div align ="center"  width="70%">
   
-  ![alt text](/src/imagens/DagramaEstrutura.PNG)
+  ![alt text](/src/imagens/DiagramaEstrutura.png)
 </div>
 
 ## ***Diagrama de Casos de Uso***
 
 <div align="center"  width="70%">
 
-  ![alt text](/src/imagens/casoUso.PNG)
+  ![alt text](/src/imagens/DiagramaCasoUso.png)
 
 </div>
 
 ## ***Diagrama de classe***
 <div align="center"  width="70%">
 
-  ![alt text](/src/imagens/diagramaClasse.PNG)
+  ![alt text](/src/imagens/DiagramaClasse.png)
 
 </div>
 
@@ -197,14 +197,14 @@ Esta arquitetura permite escalabilidade, manutenção simplificada e uma experi�
 ## ***Modelo Entidade-Relacionamento (DER)***
 <div align="center"  width="70%">
 
-  ![alt text](/src/imagens/diagramaDer.PNG)
+  ![alt text](/src/imagens/Diagrama.png)
 
 </div>
 
 ## ***diagrama de sequencia***
 <div align="center"  width="70%">
 
-  ![alt text](/src/imagens/diagramadesequencia.PNG)
+  ![alt text](/src/imagens/diagramasequen.png)
 
 </div>
 
@@ -650,6 +650,11 @@ git clone https://github.com/valdeircesario/MedTriagem.git
 ```bash
 npm install
 ```
+## ***Instale a Dependência para o envio de email de recuperação de senha***
+
+```bash
+npm install nodemailer
+```
 
 ## ***Configure o Ambiente***
 
@@ -696,6 +701,7 @@ JWT_SECRET="sua_chave_super_secreta"
 ```bash
 npx prisma migrate
 npx prisma migrate dev --name init
+npx sequelize-cli db:migrate
 ```
 
 Após executar estes comandos, será criada uma estrutura de pastas como:
@@ -739,12 +745,12 @@ Servidor rodando na porta 3001
 
 | *Tela Inicial* | *Paciente* | *Administrador* |
 |:------------:|:-------:|:---------:|
-| ![Tela Inicial 1](./src/imagens/loginpacente.PNG) | ![Paciente 1](./src/imagens/telaInicial.PNG) | ![Administrador 1](./src/imagens/admin01.PNG) |
-| ![Tela Inicial 2](./src/imagens/loginadmin.PNG) | ![Paciente 2](./src/imagens/user01.PNG) | ![Administrador 2](./src/imagens/admin02.PNG) |
-| ![Tela Inicial 3](./src/imagens/cadastro01.PNG) | ![Paciente 3](./src/imagens/user02.PNG) | ![Administrador 3](./src/imagens/admin03.PNG) |
-| ![Tela Inicial 4](./src/imagens/loginadmin.PNG) | ![Paciente 4](./src/imagens/user03.PNG) | ![Administrador 4](./src/imagens/admin04.PNG) |
-| ![Tela Inicial 5](./src/imagens/loginpacente.PNG) | ![Paciente 5](./src/imagens/user04.PNG) | ![Administrador 5](./src/imagens/admin05.PNG) |
-| ![Tela Inicial 6](./src/imagens/cadastro01.PNG) | ![Paciente 6](./src/imagens/user05.PNG) | ![Administrador 6](./src/imagens/admin06.PNG) |
+| ![Tela Inicial 1](/src/imagens/login01.png) | ![Paciente 1](/src/imagens/user01.png) | ![Administrador 1](/src/imagens/admin01.png) |
+| ![Tela Inicial 2](/src/imagens/cadastro.png) | ![Paciente 2](/src/imagens/user02.png) | ![Administrador 2](/src/imagens/admin02.png) |
+| ![Tela Inicial 3](/src/imagens/recuperarsenha.png) | ![Paciente 3](/src/imagens/user03.png) | ![Administrador 3](/src/imagens/admin03.png) |
+| ![Tela Inicial 4](/src/imagens/login01.png) | ![Paciente 4](/src/imagens/user05.png) | ![Administrador 4](/src/imagens/user06.png) |
+| ![Tela Inicial 5](/src/imagens/user07.png) | ![Paciente 5](/src/imagens/user08.png) | ![Administrador 5](/src/imagens/admin03.png) |
+
 
 
 ## ***Fluxo de Utilização***
@@ -762,7 +768,7 @@ Servidor rodando na porta 3001
 
 ***Toda a documentação técnica está disponível na pasta*** `docs`:
 
-- 📘 [Documentação Completa. (PDF)](./src/docs/Documentação_sitema_de_triagem.pdf)
+- 📘 [Documentação Completa. (PDF)](/src/docs/Documentação_sitema_de_triagem.pdf)
 
 ---
 

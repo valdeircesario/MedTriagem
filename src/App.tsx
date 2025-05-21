@@ -5,6 +5,7 @@ import { useAuth } from './contexts/AuthContext';
 // Importar componentes de páginas
 import Login from './pages/Login';
 import Cadastro from './pages/Cadastro';
+import ResetPassword from './pages/ResetPassword';
 import UsuarioHome from './pages/usuario/UsuarioHome';
 import UsuarioTriagem from './pages/usuario/UsuarioTriagem';
 import UsuarioConsultas from './pages/usuario/UsuarioConsultas';
@@ -41,6 +42,7 @@ function App() {
       {/* Rotas públicas */}
       <Route path="/login" element={<Login />} />
       <Route path="/cadastro" element={<Cadastro />} />
+      <Route path="/reset-password" element={<ResetPassword />} />
       
       {/* Rotas de usuário */}
       <Route path="/" element={
@@ -72,4 +74,4 @@ function App() {
   );
 }
 
-export default App;
+export default App

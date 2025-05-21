@@ -141,6 +141,14 @@ const AdminConsultas = () => {
     });
   };
 
+  // Verificar se a consulta já passou
+  const isConsultaPassada = (dataString, hora) => {
+    const [horaStr, minutoStr] = hora.split(':');
+    const dataConsulta = new Date(dataString);
+    dataConsulta.setHours(parseInt(horaStr), parseInt(minutoStr), 0);
+    return dataConsulta < new Date();
+  };
+
   // Filtrar consultas por termo de busca
   const consultasFiltradas = consultas.filter(consulta => {
     if (!searchTerm) return true;
@@ -174,7 +182,7 @@ const AdminConsultas = () => {
   return (
     <div>
       <h1 className="text-2xl font-bold text-gray-900 mb-2">Gerenciamento de Consultas</h1>
-      <p className="text-gray-600 mb-6">Visualizar, filtro e registro históricos médicos de consultas</p>
+      <p className="text-gray-600 mb-6">Visualize, filtre e registre históricos médicos de consultas</p>
       
       {error && <Alert type="error" message={error} className="mb-4" />}
       {success && <Alert type="success" message={success} className="mb-4" />}
@@ -245,11 +253,7 @@ const AdminConsultas = () => {
       ) : (
         <div className="space-y-4">
           {consultasOrdenadas.map((consulta) => {
-            const dataConsulta = new Date(consulta.data);
-            const hoje = new Date();
-            hoje.setHours(0, 0, 0, 0);
-            
-            const consultaPassada = dataConsulta < hoje;
+            const consultaPassada = isConsultaPassada(consulta.data, consulta.hora);
             const possuiHistorico = !!consulta.historicoMedico;
             
             return (

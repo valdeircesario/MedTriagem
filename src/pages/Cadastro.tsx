@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { Guitar as Hospital } from 'lucide-react';
+import { Stethoscope } from 'lucide-react';
 import { useAuth } from '../contexts/AuthContext';
 import Button from '../components/Button';
 import Input from '../components/Input';
@@ -17,6 +17,7 @@ const Cadastro = () => {
     dataNascimento: ''
   });
   const [error, setError] = useState('');
+  const [success, setSuccess] = useState('');
   const [loading, setLoading] = useState(false);
   const { cadastrar } = useAuth();
   const navigate = useNavigate();
@@ -64,6 +65,7 @@ const Cadastro = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError('');
+    setSuccess('');
     
     if (!validarFormulario()) {
       return;
@@ -79,11 +81,13 @@ const Cadastro = () => {
         telefone: formData.telefone,
         dataNascimento: formData.dataNascimento
       });
-
       
-      alert('Cadastro realizado com sucesso! Você pode fazer login agora.');
+      setSuccess('Cadastro realizado com sucesso! Redirecionando...');
       
-      navigate('/login', { replace: true });
+      // Aguardar 2 segundos antes de redirecionar
+      setTimeout(() => {
+        navigate('/login');
+      }, 2000);
     } catch (err) {
       console.error(err);
       setError(
@@ -100,7 +104,7 @@ const Cadastro = () => {
       <div className="w-full max-w-md space-y-8">
         <div className="text-center">
           <div className="flex justify-center">
-            <img src="/src/imagens/logo.PNG" alt="Logo" className="h-14 w-15" />
+            <Stethoscope className="h-12 w-12 text-blue-600" />
           </div>
           <h2 className="mt-6 text-3xl font-bold tracking-tight text-gray-900">
             Cadastre-se no MedTriagem
@@ -112,6 +116,7 @@ const Cadastro = () => {
 
         <div className="bg-white py-8 px-4 shadow sm:rounded-lg sm:px-10">
           {error && <Alert type="error" message={error} />}
+          {success && <Alert type="success" message={success} />}
 
           <form className="space-y-6" onSubmit={handleSubmit}>
             <Input

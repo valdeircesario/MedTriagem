@@ -5,24 +5,34 @@ import { PrismaClient } from '@prisma/client';
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 import cookieParser from 'cookie-parser';
+import nodemailer from 'nodemailer';
+import crypto from 'crypto';
 
 dotenv.config();
 const prisma = new PrismaClient();
 const app = express();
 const PORT = process.env.PORT || 3001;
 
+// Configurar transporter do nodemailer
+const transporter = nodemailer.createTransport({
+  host: "smtp.gmail.com",
+  port: 587,
+  secure: false,
+  auth: {
+    user: process.env.EMAIL_USER,
+    pass: process.env.EMAIL_PASS
+  }
+});
+
 // Middleware
 app.use(cors({
   origin: function(origin, callback) {
-    // Permitir solicitações sem origem (como aplicativos móveis ou solicitações curl)
-    if (!origin) return callback(null, true);
-    
-    // Verifique se a origem é localhost com qualquer porta
-    if (origin.match(/^http:\/\/localhost:[0-9]+$/)) {
-      return callback(null, true);
+    const allowedOrigins = ['http://localhost:5173'];
+    if (!origin || allowedOrigins.includes(origin)) {
+      callback(null, true);
+    } else {
+      callback(new Error('Not allowed by CORS'));
     }
-    
-    callback(new Error('Not allowed by CORS'));
   },
   credentials: true
 }));
@@ -81,15 +91,11 @@ app.post('/api/usuarios/cadastro', async (req, res) => {
       process.env.JWT_SECRET,
       { expiresIn: '1d' }
     );
-    //alert
-
 
     res.status(201).json({ 
       mensagem: 'Usuário cadastrado com sucesso',
       token,
       usuario: { id: usuario.id, nome: usuario.nome, email: usuario.email }
-
-    
     });
   } catch (erro) {
     console.error(erro);
@@ -138,6 +144,98 @@ app.post('/api/auth/login', async (req, res) => {
   } catch (erro) {
     console.error(erro);
     res.status(500).json({ mensagem: 'Erro no servidor', erro: erro.message });
+  }
+});
+
+// Rota de recuperação de senha
+app.post('/api/auth/reset-password', async (req, res) => {
+  try {
+    const { email } = req.body;
+
+    // Verificar se o usuário existe
+    const usuario = await prisma.usuario.findUnique({ where: { email } });
+    if (!usuario) {
+      return res.status(404).json({ mensagem: 'Usuário não encontrado' });
+    }
+
+    // Gerar token de recuperação
+    const resetToken = crypto.randomBytes(32).toString('hex');
+    const resetTokenExpiry = new Date(Date.now() + 6000); // 10 minutos
+
+    // Atualizar usuário com token de recuperação
+    await prisma.usuario.update({
+      where: { email },
+      data: {
+        resetToken,
+        resetTokenExpiry
+      }
+    });
+
+    // Enviar e-mail
+    const resetUrl = `http://localhost:5173/reset-password?token=${resetToken}`;
+    await transporter.sendMail({
+      from: process.env.EMAIL_USER,
+      to: email,
+      subject: 'Recuperação de Senha - MedTriagem',
+      html: `
+        <h1>Recuperação de Senha</h1>
+        <p>Você solicitou a recuperação de senha para sua conta no MedTriagem.</p>
+        <p>Clique no link abaixo para redefinir sua senha:</p>
+        <a href="${resetUrl}">Redefinir Senha</a>
+        <p>Este link é válido por 10 minutos.</p>
+        <p>Se você não solicitou esta recuperação, ignore este e-mail.</p>
+      `
+    });
+
+    res.json({ mensagem: 'E-mail de recuperação enviado com sucesso' });
+  } catch (erro) {
+    console.error(erro);
+    res.status(500).json({ mensagem: 'Erro ao enviar e-mail de recuperação' });
+  }
+});
+
+// Rota para atualizar a senha
+app.post('/api/auth/update-password', async (req, res) => {
+  try {
+    const { token, newPassword } = req.body;
+
+    // Encontrar usuário com o token válido
+    const usuario = await prisma.usuario.findFirst({
+      where: {
+        resetToken: token,
+        resetTokenExpiry: {
+          gt: new Date()
+        }
+      }
+    });
+
+    if (!usuario) {
+      return res.status(400).json({ 
+        mensagem: 'Token inválido ou expirado' 
+      });
+    }
+
+    // Hash da nova senha
+    const salt = await bcrypt.genSalt(10);
+    const senhaCriptografada = await bcrypt.hash(newPassword, salt);
+
+    // Atualizar senha e limpar token
+    await prisma.usuario.update({
+      where: { id: usuario.id },
+      data: {
+        senha: senhaCriptografada,
+        resetToken: null,
+        resetTokenExpiry: null
+      }
+    });
+
+    res.json({ mensagem: 'Senha atualizada com sucesso' });
+  } catch (erro) {
+    console.error(erro);
+    res.status(500).json({ 
+      mensagem: 'Erro ao atualizar senha',
+      erro: erro.message 
+    });
   }
 });
 
@@ -267,12 +365,17 @@ app.post('/api/admin/consultas', autenticarToken, async (req, res) => {
     const adminId = req.usuario.id;
     const { usuarioId, triagemId, data, hora, local, especialidade, medico } = req.body;
 
+    // Ajustar a data para manter o dia correto
+    const dataConsulta = new Date(data);
+    const offset = dataConsulta.getTimezoneOffset();
+    dataConsulta.setMinutes(dataConsulta.getMinutes() + offset);
+
     const consulta = await prisma.consulta.create({
       data: {
         usuarioId,
         adminId,
         triagemId,
-        data: new Date(data),
+        data: dataConsulta,
         hora,
         local,
         especialidade,
@@ -339,7 +442,13 @@ app.get('/api/usuario/consultas', autenticarToken, async (req, res) => {
       }
     });
 
-    res.status(200).json(consultas);
+    // Ajustar as datas para o fuso horário local
+    const consultasAjustadas = consultas.map(consulta => ({
+      ...consulta,
+      data: new Date(new Date(consulta.data).getTime() + new Date().getTimezoneOffset() * 60000)
+    }));
+
+    res.status(200).json(consultasAjustadas);
   } catch (erro) {
     console.error(erro);
     res.status(500).json({ mensagem: 'Erro no servidor', erro: erro.message });
@@ -371,7 +480,13 @@ app.get('/api/admin/consultas', autenticarToken, async (req, res) => {
       }
     });
 
-    res.status(200).json(consultas);
+    // Ajustar as datas para o fuso horário local
+    const consultasAjustadas = consultas.map(consulta => ({
+      ...consulta,
+      data: new Date(new Date(consulta.data).getTime() + new Date().getTimezoneOffset() * 60000)
+    }));
+
+    res.status(200).json(consultasAjustadas);
   } catch (erro) {
     console.error(erro);
     res.status(500).json({ mensagem: 'Erro no servidor', erro: erro.message });
@@ -437,7 +552,16 @@ app.get('/api/usuario/historico-medico', autenticarToken, async (req, res) => {
       }
     });
 
-    res.status(200).json(historicos);
+    // Ajustar as datas para o fuso horário local
+    const historicosAjustados = historicos.map(historico => ({
+      ...historico,
+      consulta: {
+        ...historico.consulta,
+        data: new Date(new Date(historico.consulta.data).getTime() + new Date().getTimezoneOffset() * 60000)
+      }
+    }));
+
+    res.status(200).json(historicosAjustados);
   } catch (erro) {
     console.error(erro);
     res.status(500).json({ mensagem: 'Erro no servidor', erro: erro.message });

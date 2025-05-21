@@ -90,6 +90,16 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
+  // Função de recuperação de senha
+  const resetPassword = async (email) => {
+    try {
+      await axios.post(`${API_URL}/auth/reset-password`, { email });
+    } catch (error) {
+      console.error('Erro ao solicitar recuperação de senha:', error);
+      throw error;
+    }
+  };
+
   // Função de logout
   const logout = () => {
     localStorage.removeItem('token');
@@ -103,6 +113,7 @@ export const AuthProvider = ({ children }) => {
     loading,
     login,
     cadastrar,
+    resetPassword,
     logout,
     isAuthenticated: !!user
   };

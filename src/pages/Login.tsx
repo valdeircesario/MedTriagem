@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { Guitar as Hospital, User, UserCog } from 'lucide-react';
+import { Stethoscope, User, UserCog } from 'lucide-react';
 import { useAuth } from '../contexts/AuthContext';
 import Button from '../components/Button';
 import Input from '../components/Input';
@@ -12,7 +12,10 @@ const Login = () => {
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
   const [tipoUsuario, setTipoUsuario] = useState('usuario');
-  const { login } = useAuth();
+  const [showResetModal, setShowResetModal] = useState(false);
+  const [resetEmail, setResetEmail] = useState('');
+  const [resetSuccess, setResetSuccess] = useState(false);
+  const { login, resetPassword } = useAuth();
   const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
@@ -28,7 +31,6 @@ const Login = () => {
       setLoading(true);
       const usuario = await login(email, senha, tipoUsuario);
       
-      // Redirecionar para a página correta com base no tipo de usuário
       if (usuario.role === 'admin') {
         navigate('/admin');
       } else {
@@ -45,17 +47,41 @@ const Login = () => {
     }
   };
 
+  const handleResetPassword = async (e) => {
+    e.preventDefault();
+    setError('');
+    setResetSuccess(false);
+
+    if (!resetEmail) {
+      setError('Por favor, informe seu e-mail');
+      return;
+    }
+
+    try {
+      setLoading(true);
+      await resetPassword(resetEmail);
+      setResetSuccess(true);
+      setResetEmail('');
+    } catch (err) {
+      console.error(err);
+      setError(
+        err.response?.data?.mensagem || 
+        'Erro ao enviar e-mail de recuperação. Tente novamente.'
+      );
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-100 px-4 py-12 sm:px-6 lg:px-8">
       <div className="w-full max-w-md space-y-8">
         <div className="text-center">
           <div className="flex justify-center">
-            <img src="/src/imagens/logo.PNG" alt="Logo" className="h-14 w-15" />
-  
-            
+            <Stethoscope className="h-12 w-12 text-blue-600" />
           </div>
           <h2 className="mt-6 text-3xl font-bold tracking-tight text-gray-900">
-            MediTriagem
+            MedTriagem
           </h2>
           <p className="mt-2 text-sm text-gray-600">
             Sistema de Triagem Médica
@@ -119,6 +145,18 @@ const Login = () => {
               placeholder="Sua senha"
             />
 
+            <div className="flex items-center justify-between">
+              <div className="text-sm">
+                <button
+                  type="button"
+                  onClick={() => setShowResetModal(true)}
+                  className="font-medium text-blue-600 hover:text-blue-500"
+                >
+                  Esqueceu sua senha?
+                </button>
+              </div>
+            </div>
+
             <div>
               <Button
                 type="submit"
@@ -143,6 +181,62 @@ const Login = () => {
           )}
         </div>
       </div>
+
+      {/* Modal de recuperação de senha */}
+      {showResetModal && (
+        <div className="fixed inset-0 z-50 overflow-y-auto">
+          <div className="flex items-center justify-center min-h-screen p-4">
+            <div className="fixed inset-0 bg-black opacity-40" onClick={() => setShowResetModal(false)}></div>
+            
+            <div className="bg-white rounded-lg shadow-xl z-10 w-full max-w-md p-6 relative">
+              <h3 className="text-xl font-medium text-gray-900 mb-4">
+                Recuperar Senha
+              </h3>
+              
+              {resetSuccess ? (
+                <div>
+                  <Alert type="success" message="Um link de recuperação foi enviado para seu e-mail." className="mb-4" />
+                  <Button onClick={() => setShowResetModal(false)} fullWidth>
+                    Fechar
+                  </Button>
+                </div>
+              ) : (
+                <form onSubmit={handleResetPassword}>
+                  <Input
+                    id="resetEmail"
+                    name="resetEmail"
+                    type="email"
+                    label="E-mail cadastrado"
+                    value={resetEmail}
+                    onChange={(e) => setResetEmail(e.target.value)}
+                    required
+                    fullWidth
+                    placeholder="seu@email.com"
+                  />
+                  
+                  <div className="mt-6 flex gap-3">
+                    <Button
+                      type="button"
+                      variant="outline"
+                      onClick={() => setShowResetModal(false)}
+                      fullWidth
+                    >
+                      Cancelar
+                    </Button>
+                    <Button
+                      type="submit"
+                      disabled={loading}
+                      fullWidth
+                    >
+                      {loading ? 'Enviando...' : 'Enviar Link'}
+                    </Button>
+                  </div>
+                </form>
+              )}
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

@@ -105,7 +105,7 @@ const AdminHome = () => {
       <div>
         <h1 className="text-2xl font-bold text-gray-900">Painel Administrativo</h1>
         <p className="mt-1 text-gray-600">
-          Bem-vindo(a), {user?.nome || 'Administrador'}! Gerencie triagens, consultas e Lance o Historico.
+          Bem-vindo(a), {user?.nome || 'Administrador'}! Gerencie triagens, consultas e históricos médicos.
         </p>
       </div>
       
@@ -172,7 +172,7 @@ const AdminHome = () => {
         ) : (
           <div className="space-y-4">
             {triagensRecentes.map((triagem) => (
-              <Card 
+                          <Card 
   key={triagem.id} 
   className={`border-l-4 transition-all hover:shadow-md cursor-pointer ${
     triagem.gravidade === 'Crítico' 
@@ -260,7 +260,7 @@ const AdminHome = () => {
       {/* Links rápidos */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
         <Card className="hover:shadow-lg transition-shadow cursor-pointer">
-    <Link to="/admin/triagens" className="flex flex-col items-center p-4 no-underline">
+          <Link to="/admin/triagens" className="flex flex-col items-center p-4 no-underline">
       <div className="p-3 rounded-full bg-blue-100 text-blue-600">
         <FileWarning size={24} />
       </div>
@@ -269,9 +269,9 @@ const AdminHome = () => {
         Visualize e agende consultas para triagens pendentes
       </p>
     </Link>
-  </Card>
+        </Card>
         
-                <Card className="hover:shadow-lg transition-shadow cursor-pointer">
+        <Card className="hover:shadow-lg transition-shadow cursor-pointer">
           <Link to="/admin/consultas" className="flex flex-col items-center p-4 no-underline">
             <div className="p-3 rounded-full bg-green-100 text-green-600">
               <Calendar size={24} />
@@ -283,7 +283,7 @@ const AdminHome = () => {
           </Link>
         </Card>
         
-                <Card className="hover:shadow-lg transition-shadow cursor-pointer">
+        <Card className="hover:shadow-lg transition-shadow cursor-pointer">
           <Link to="/admin/historico" className="flex flex-col items-center p-4 no-underline">
             <div className="p-3 rounded-full bg-purple-100 text-purple-600">
               <ClipboardList size={24} />
