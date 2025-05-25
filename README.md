@@ -88,6 +88,7 @@ Esta arquitetura permite escalabilidade, manutenção simplificada e uma experi�
 **RF001 - Autenticação de Usuários**
 - O sistema deve permitir o cadastro de novos usuários (pacientes)
 - O sistema deve autenticar usuários através de e-mail e senha
+- O sistema deve permitir o paciente uma recuperação de senha por email.
 - O sistema deve implementar diferentes níveis de acesso (paciente e administrador)
 
 **RF002 - Triagem Automatizada**
@@ -130,7 +131,7 @@ Esta arquitetura permite escalabilidade, manutenção simplificada e uma experi�
 **RNF002 - Segurança**
 - Todas as senhas devem ser armazenadas utilizando tokens
 - A comunicação entre cliente e servidor deve ser criptografada (HTTPS)
-- Os tokens de autenticação devem expirar em 24 horas
+- Os tokens de autenticação devem expirar com um tempo definido horas
 
 **RNF003 - Desempenho**
 - O tempo de resposta para operações regulares não deve exceder 2 segundos
@@ -189,7 +190,7 @@ Esta arquitetura permite escalabilidade, manutenção simplificada e uma experi�
 ## ***Diagrama de classe***
 <div align="center"  width="70%">
 
-  ![alt text](/imagens/diagramadeclasse01.PNG)
+  ![alt text](/imagens/diagramaclasses.PNG)
 
 </div>
 
@@ -197,7 +198,7 @@ Esta arquitetura permite escalabilidade, manutenção simplificada e uma experi�
 ## ***Modelo Entidade-Relacionamento (DER)***
 <div align="center"  width="70%">
 
-  ![alt text](/imagens/Diagrama.png)
+  ![alt text](/imagens/diagramader.PNG)
 
 </div>
 
@@ -245,6 +246,8 @@ Esta arquitetura permite escalabilidade, manutenção simplificada e uma experi�
 | endereco | TEXT | Endereço completo do usuário | Não nulo |
 | telefone | TEXT | Número de telefone do usuário | Não nulo |
 | dataNascimento | TIMESTAMP | Data de nascimento do usuário | Não nulo |
+| resetToken | TEXT | Token para geração de nova senha | Não nulo |
+| resetTokenExpiry | TIMESTAMP | Tempo de duração do token de recuperação de senha | Não nulo |
 | criadoEm | TIMESTAMP | Data e hora da criação do registro | Não nulo, Valor padrão: data/hora atual |
 | atualizadoEm | TIMESTAMP | Data e hora da última atualização | Não nulo |
 
@@ -364,6 +367,7 @@ Esta arquitetura permite escalabilidade, manutenção simplificada e uma experi�
 
 **2. Autenticação**
 - Login seguro com verificação de credenciais
+- Recuperação de senha para os pacientes por Email e token,
 - Diferenciação entre perfis de acesso (paciente/administrador)
 
 **3. Gestão de Perfil**
@@ -496,11 +500,14 @@ Esta arquitetura permite escalabilidade, manutenção simplificada e uma experi�
     "endereco" TEXT NOT NULL,
     "telefone" TEXT NOT NULL,
     "dataNascimento" TIMESTAMP(3) NOT NULL,
+    "resetToken " TEXT NOT NULL,
+    "resetTokenExpiry" TIMESTAMP(3) NOT NULL,
     "criadoEm" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "atualizadoEm" TIMESTAMP(3) NOT NULL,
 
     CONSTRAINT "Usuario_pkey" PRIMARY KEY ("id")
 );
+
 ```
 
 ## ***Tabela: Admin***
@@ -768,7 +775,7 @@ Servidor rodando na porta 3001
 
 ***Toda a documentação técnica está disponível na pasta*** `docs`:
 
-- 📘 [Documentação Completa. (PDF)](/src/docs/Documentação_sitema_de_triagem.pdf)
+- 📘 [Documentação Completa. (PDF)](/src/docs/DOCUMENTAÇÃO_SISTEMA_DE_TRIAGEM_MÉDICA.pdf)
 
 ---
 
