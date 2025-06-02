@@ -105,6 +105,19 @@ const AdminTriagens = () => {
 
   const handleChangeAgendamento = (e) => {
     const { name, value } = e.target;
+    
+    // Validação específica para o campo hora
+    if (name === 'hora') {
+      const [hours, minutes] = value.split(':');
+      const hoursNum = parseInt(hours);
+      const minutesNum = parseInt(minutes);
+      
+      // Verificar se é um horário válido (00:00 até 23:59)
+      if (hoursNum < 0 || hoursNum > 23 || minutesNum < 0 || minutesNum > 59) {
+        return;
+      }
+    }
+    
     setFormAgendamento(prev => ({
       ...prev,
       [name]: value
@@ -122,6 +135,25 @@ const AdminTriagens = () => {
       if (!formAgendamento.data || !formAgendamento.hora || !formAgendamento.local ||
           !formAgendamento.especialidade || !formAgendamento.medico) {
         setError('Por favor, preencha todos os campos');
+        setLoading(false);
+        return;
+      }
+      
+      
+      const dataConsulta = new Date(formAgendamento.data);
+      const [hours, minutes] = formAgendamento.hora.split(':');
+      dataConsulta.setHours(parseInt(hours), parseInt(minutes), 0, 0);
+      
+      const agora = new Date();
+
+      
+
+      //para ajustar a data para o dia seguinte
+      // Remover horas, minutos, segundos e milissegundos aqui..
+      agora.setHours(0, 0, 0, 0);
+      dataConsulta.setHours(0, 0, 0, 0);
+      if (dataConsulta < agora) {
+        setError('Não é possível agendar consultas para data/horários muito proximos ou passados.');
         setLoading(false);
         return;
       }
@@ -184,6 +216,12 @@ const AdminTriagens = () => {
     // Depois por data (mais recente primeiro)
     return new Date(b.criadoEm) - new Date(a.criadoEm);
   });
+
+  // Obter data mínima para agendamento (hoje)
+  const getDataMinima = () => {
+    const hoje = new Date();
+    return hoje.toISOString().split('T')[0];
+  };
 
   if (loading && triagens.length === 0) {
     return (
@@ -409,6 +447,7 @@ const AdminTriagens = () => {
                       label="Data da consulta"
                       value={formAgendamento.data}
                       onChange={handleChangeAgendamento}
+                      min={getDataMinima()}
                       required
                       fullWidth
                     />
