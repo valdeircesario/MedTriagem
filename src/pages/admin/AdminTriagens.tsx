@@ -90,7 +90,7 @@ const AdminTriagens = () => {
     setTriagemSelecionada(triagem);
     setMostrarModal(true);
     
-    // Inicializar formulário com data atual
+    // Inicializar formulário com a data atual
     const hoje = new Date();
     const dataFormatada = hoje.toISOString().split('T')[0];
     
@@ -139,21 +139,14 @@ const AdminTriagens = () => {
         return;
       }
       
-      
-      const dataConsulta = new Date(formAgendamento.data);
+      // Validar data e hora
+      const agora = new Date();
       const [hours, minutes] = formAgendamento.hora.split(':');
+      const dataConsulta = new Date(formAgendamento.data);
       dataConsulta.setHours(parseInt(hours), parseInt(minutes), 0, 0);
       
-      const agora = new Date();
-
-      
-
-      //para ajustar a data para o dia seguinte
-      // Remover horas, minutos, segundos e milissegundos aqui..
-      agora.setHours(0, 0, 0, 0);
-      dataConsulta.setHours(0, 0, 0, 0);
-      if (dataConsulta < agora) {
-        setError('Não é possível agendar consultas para data/horários muito proximos ou passados.');
+      if (dataConsulta == agora) {
+        setError('Não é possível agendar consultas para horários que já passaram');
         setLoading(false);
         return;
       }
@@ -194,6 +187,12 @@ const AdminTriagens = () => {
     });
   };
 
+  // Obter data mínima (hoje)
+  const getDataMinima = () => {
+    const hoje = new Date();
+    return hoje.toISOString().split('T')[0];
+  };
+
   // Filtrar triagens por termo de busca
   const triagensFiltradas = triagens.filter(triagem => {
     if (!searchTerm) return true;
@@ -216,12 +215,6 @@ const AdminTriagens = () => {
     // Depois por data (mais recente primeiro)
     return new Date(b.criadoEm) - new Date(a.criadoEm);
   });
-
-  // Obter data mínima para agendamento (hoje)
-  const getDataMinima = () => {
-    const hoje = new Date();
-    return hoje.toISOString().split('T')[0];
-  };
 
   if (loading && triagens.length === 0) {
     return (
@@ -256,26 +249,7 @@ const AdminTriagens = () => {
           </Button>
         </div>
         
-        <div className="relative w-full md:w-auto">
-          <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-            <Search className="h-5 w-5 text-gray-400" />
-          </div>
-          <input
-            type="text"
-            className="pl-10 pr-10 py-2 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full md:w-64"
-            placeholder="Buscar por nome ou gravidade"
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-          />
-          {searchTerm && (
-            <button
-              className="absolute inset-y-0 right-0 pr-3 flex items-center"
-              onClick={() => setSearchTerm('')}
-            >
-              <X className="h-5 w-5 text-gray-400" />
-            </button>
-          )}
-        </div>
+        
       </div>
       
       {triagensOrdenadas.length === 0 ? (

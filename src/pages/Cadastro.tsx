@@ -27,6 +27,29 @@ const Cadastro = () => {
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
+  const validarTelefone = (telefone) => {
+  // Remover todos os caracteres não numéricos
+  const apenasNumeros = telefone.replace(/\D/g, '');
+
+  // Aplicar a máscara (00) 00000-0000
+  const telefoneFormatado = apenasNumeros.replace(
+    /^(\d{2})(\d{5})(\d{4})$/,
+    '($1) $2-$3'
+  );
+
+  // Atualizar o campo com o telefone formatado
+  setFormData((prev) => ({ ...prev, telefone: telefoneFormatado }));
+
+  // Validar se o telefone tem o formato correto
+  const telefoneRegex = /^\(\d{2}\) \d{4,5}-\d{4}$/;
+  if (!telefoneRegex.test(telefoneFormatado)) {
+    setError('Por favor, insira um telefone válido no formato (00) 00000-0000');
+    return false;
+  }
+
+  return true;
+};
+
   const validarFormulario = () => {
     if (!formData.nome || !formData.email || !formData.senha || !formData.endereco || 
         !formData.telefone || !formData.dataNascimento) {
@@ -50,15 +73,28 @@ const Cadastro = () => {
       setError('Por favor, insira um e-mail válido');
       return false;
     }
-
-    // Validar data de nascimento
-    const hoje = new Date();
-    const dataNascimento = new Date(formData.dataNascimento);
-    if (dataNascimento > hoje) {
-      setError('Data de nascimento inválida');
-      return false;
+    // Validar telefone
+    if (!validarTelefone(formData.telefone)) {
+    return false;
     }
 
+        // Validar data de nascimento
+    const hoje = new Date();
+    const dataNascimento = new Date(formData.dataNascimento);
+    const anoMinimo = 1910;
+    
+    // Verificar se a data de nascimento é maior ou igual a hoje
+    if (dataNascimento >= hoje) {
+      setError('Data de nascimento não pode ser maior ou igual a hoje');
+      return false;
+    }
+    
+    // Verificar se a data de nascimento é anterior ao ano mínimo
+    if (dataNascimento.getFullYear() < anoMinimo) {
+      setError('Data de nascimento inválida. Ano deve ser maior ou igual a 1910');
+      return false;
+    }
+    
     return true;
   };
 
