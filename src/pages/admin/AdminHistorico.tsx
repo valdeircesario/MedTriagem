@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { Calendar, Clock, FileText, UserCircle, Search, X, ChevronUp, ChevronDown } from 'lucide-react';
+import { Calendar, Clock, FileText, UserCircle, Search, X, ChevronUp, ChevronDown, User, Phone, MapPin } from 'lucide-react';
 import Card from '../../components/Card';
 import Alert from '../../components/Alert';
 
@@ -19,45 +19,34 @@ const AdminHistorico = () => {
 
   const carregarHistoricos = async () => {
     try {
-      // Obter todas as consultas
-      const consultasRes = await axios.get(`${API_URL}/admin/consultas`);
-      const consultas = consultasRes.data;
+      setLoading(true);
+      setError('');
       
-      // Filtrar consultas com histórico médico
-      const consultasComHistorico = consultas.filter(c => c.historicoMedico);
+      console.log('=== CARREGANDO HISTÓRICOS NO FRONTEND ===');
       
-      // Mapear para obter os detalhes do histórico médico
-      const historicosDetalhados = await Promise.all(
-        consultasComHistorico.map(async (consulta) => {
-          try {
-            // Simulando a obtenção do histórico completo
-            
-            return {
-              ...consulta.historicoMedico,
-              consulta,
-              usuario: consulta.usuario
-            };
-          } catch (err) {
-            console.error(`Erro ao obter histórico para consulta ${consulta.id}:`, err);
-            return null;
-          }
-        })
-      );
+      // Usar a rota específica para históricos médicos
+      const response = await axios.get(`${API_URL}/admin/historicos`);
+      const historicosData = response.data;
       
-      // Filtrar históricos nulos (se houver erros)
-      const historicosValidos = historicosDetalhados.filter(h => h !== null);
+      console.log('Resposta da API:', historicosData);
+      console.log('Total de históricos recebidos:', historicosData.length);
       
-      setHistoricos(historicosValidos);
-      setLoading(false);
+      if (historicosData.length > 0) {
+        console.log('Primeiro histórico:', historicosData[0]);
+      }
+      
+      setHistoricos(historicosData);
+      
     } catch (err) {
-      console.error(err);
+      console.error('Erro ao carregar históricos:', err);
       setError('Erro ao carregar históricos médicos. Tente novamente mais tarde.');
+    } finally {
       setLoading(false);
     }
   };
 
-  // Formatar data
   const formatarData = (dataString) => {
+    if (!dataString) return '';
     const data = new Date(dataString);
     return data.toLocaleDateString('pt-BR', {
       day: '2-digit',
@@ -66,34 +55,40 @@ const AdminHistorico = () => {
     });
   };
 
-  // Expandir ou recolher histórico
-  const toggleHistorico = (id) => {
-    if (historicoExpandido === id) {
-      setHistoricoExpandido(null);
-    } else {
-      setHistoricoExpandido(id);
-    }
+  const formatarDataHora = (dataString) => {
+    if (!dataString) return '';
+    const data = new Date(dataString);
+    return data.toLocaleDateString('pt-BR', {
+      day: '2-digit',
+      month: '2-digit',
+      year: 'numeric',
+      hour: '2-digit',
+      minute: '2-digit'
+    });
   };
 
-  // Filtrar históricos por termo de busca
+  const toggleHistorico = (id) => {
+    setHistoricoExpandido(historicoExpandido === id ? null : id);
+  };
+
   const historicosFiltrados = historicos.filter(historico => {
-    if (!searchTerm) return true;
+    if (!searchTerm.trim()) return true;
     
-    const termoBusca = searchTerm.toLowerCase();
-    return (
-      (historico.usuario?.nome?.toLowerCase().includes(termoBusca)) ||
-      (historico.consulta?.especialidade?.toLowerCase().includes(termoBusca)) ||
-      (historico.consulta?.medico?.toLowerCase().includes(termoBusca)) ||
-      (historico.diagnostico?.toLowerCase().includes(termoBusca))
+    const termoBusca = searchTerm.toLowerCase().trim();
+    const searchFields = [
+      historico.usuario?.nome,
+      historico.consulta?.especialidade,
+      historico.consulta?.medico,
+      historico.diagnostico,
+      historico.conclusao
+    ];
+    
+    return searchFields.some(field => 
+      field?.toLowerCase().includes(termoBusca)
     );
   });
 
-  // Ordenar históricos por data (mais recentes primeiro)
-  const historicosOrdenados = [...historicosFiltrados].sort((a, b) => {
-    return new Date(b.criadoEm) - new Date(a.criadoEm);
-  });
-
-  if (loading && historicos.length === 0) {
+  if (loading) {
     return (
       <div className="flex justify-center items-center h-64">
         <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-700"></div>
@@ -104,66 +99,101 @@ const AdminHistorico = () => {
   return (
     <div>
       <h1 className="text-2xl font-bold text-gray-900 mb-2">Históricos Médicos</h1>
-      <p className="text-gray-600 mb-6">Visualize e consulte todos os históricos médicos registrados</p>
+      <p className="text-gray-600 mb-6">
+        Visualize e consulte todos os históricos médicos dos pacientes ({historicos.length} registros)
+      </p>
       
       {error && <Alert type="error" message={error} className="mb-4" />}
       
-      {/* Busca */}
-      <div className="mb-6">
-        
-      </div>
+      {/* Barra de busca */}
       
-      {historicosOrdenados.length === 0 ? (
+      
+      {historicosFiltrados.length === 0 ? (
         <Card>
           <div className="text-center py-8">
             <FileText className="h-12 w-12 text-gray-400 mx-auto mb-4" />
             <h3 className="text-lg font-medium text-gray-900 mb-2">
-              Nenhum histórico médico encontrado
+              {searchTerm ? 'Nenhum histórico encontrado' : 'Nenhum histórico médico registrado'}
             </h3>
             <p className="text-gray-600">
               {searchTerm 
                 ? 'Tente usar outros termos de busca'
-                : 'Ainda não há históricos médicos registrados no sistema'}
+                : 'Ainda não há históricos médicos registrados no sistema. Para criar um histórico, acesse uma consulta realizada e registre o diagnóstico.'}
             </p>
           </div>
         </Card>
       ) : (
         <div className="space-y-4">
-          {historicosOrdenados.map((historico) => (
-            <Card 
-              key={historico.id} 
-              className="border-l-4 border-purple-500 transition-all duration-300 hover:shadow-md"
-            >
+          {historicosFiltrados.map((historico) => (
+            <Card key={historico.id} className="border-l-4 border-purple-500 hover:shadow-lg transition-shadow">
               <div className="cursor-pointer" onClick={() => toggleHistorico(historico.id)}>
                 <div className="flex justify-between items-start">
-                  <div>
-                    <div className="flex items-center mb-1">
-                      <Calendar className="h-5 w-5 text-gray-500 mr-2" />
-                      <span className="font-medium">
-                        {formatarData(historico.consulta.data)}
-                      </span>
-                      <Clock className="h-5 w-5 text-gray-500 ml-4 mr-2" />
-                      <span>{historico.consulta.hora}</span>
+                  <div className="flex-1">
+                    {/* Cabeçalho do histórico */}
+                    <div className="flex items-center mb-3">
+                      <UserCircle className="h-6 w-6 text-purple-600 mr-3" />
+                      <div>
+                        <h3 className="text-lg font-semibold text-gray-900">
+                          {historico.usuario?.nome || 'Nome não disponível'}
+                        </h3>
+                        <div className="flex items-center text-sm text-gray-500 mt-1">
+                          <span>{historico.usuario?.email || 'Email não disponível'}</span>
+                          {historico.usuario?.telefone && (
+                            <>
+                              <span className="mx-2">•</span>
+                              <Phone className="h-4 w-4 mr-1" />
+                              <span>{historico.usuario.telefone}</span>
+                            </>
+                          )}
+                        </div>
+                      </div>
                     </div>
                     
-                    <div className="flex items-center mb-2">
-                      <UserCircle className="h-5 w-5 text-gray-500 mr-1" />
-                      <span className="font-medium">{historico.usuario.nome}</span>
-                      <span className="text-sm text-gray-500 ml-2">
-                        {historico.usuario.email}
-                      </span>
+                    {/* Informações da consulta */}
+                    <div className="bg-gray-50 rounded-lg p-3 mb-3">
+                      <div className="flex items-center mb-2">
+                        <Calendar className="h-4 w-4 text-gray-500 mr-2" />
+                        <span className="text-sm font-medium text-gray-700">
+                          Consulta: {formatarData(historico.consulta?.data)} às {historico.consulta?.hora || 'Hora não disponível'}
+                        </span>
+                      </div>
+                      <div className="flex items-center mb-2">
+                        <User className="h-4 w-4 text-gray-500 mr-2" />
+                        <span className="text-sm text-gray-600">
+                          {historico.consulta?.especialidade || 'Especialidade não disponível'} - Dr(a). {historico.consulta?.medico || 'Médico não disponível'}
+                        </span>
+                      </div>
+                      {historico.consulta?.local && (
+                        <div className="flex items-center">
+                          <MapPin className="h-4 w-4 text-gray-500 mr-2" />
+                          <span className="text-sm text-gray-600">{historico.consulta.local}</span>
+                        </div>
+                      )}
                     </div>
                     
-                    <h3 className="text-lg font-medium text-gray-900">
-                      {historico.consulta.especialidade} com Dr(a). {historico.consulta.medico}
-                    </h3>
+                    {/* Preview do diagnóstico */}
+                    <div className="mb-3">
+                      <h4 className="text-sm font-medium text-gray-700 mb-1">Diagnóstico:</h4>
+                      <p className="text-gray-600 text-sm line-clamp-2">
+                        {historico.diagnostico || 'Diagnóstico não disponível'}
+                      </p>
+                    </div>
                     
-                    <p className="text-gray-600 mt-1 line-clamp-1">
-                      {historico.diagnostico}
-                    </p>
+                    {/* Data de registro */}
+                    <div className="flex items-center text-xs text-gray-500">
+                      <Clock className="h-3 w-3 mr-1" />
+                      <span>Registrado em: {formatarDataHora(historico.criadoEm)}</span>
+                      {historico.admin?.nome && (
+                        <span className="ml-4">por Dr(a). {historico.admin.nome}</span>
+                      )}
+                    </div>
                   </div>
                   
-                  <button className="text-gray-500 p-1 rounded-full hover:bg-gray-100">
+                  {/* Botão de expandir */}
+                  <button 
+                    className="text-gray-500 p-2 rounded-full hover:bg-gray-100 ml-4 transition-colors"
+                    aria-label={historicoExpandido === historico.id ? "Recolher detalhes" : "Expandir detalhes"}
+                  >
                     {historicoExpandido === historico.id ? (
                       <ChevronUp className="h-5 w-5" />
                     ) : (
@@ -172,88 +202,150 @@ const AdminHistorico = () => {
                   </button>
                 </div>
                 
+                {/* Detalhes expandidos */}
                 {historicoExpandido === historico.id && (
-                  <div className="mt-4 pt-4 border-t border-gray-200 animate-fadeIn">
-                    <div className="mb-4">
-                      <h4 className="text-sm font-medium text-gray-500 uppercase tracking-wider mb-2">
-                        Diagnóstico
-                      </h4>
-                      <p className="text-gray-700 whitespace-pre-line">
-                        {historico.diagnostico}
-                      </p>
-                    </div>
-                    
-                    <div>
-                      <h4 className="text-sm font-medium text-gray-500 uppercase tracking-wider mb-2">
-                        Conclusão e Recomendações
-                      </h4>
-                      <p className="text-gray-700 whitespace-pre-line">
-                        {historico.conclusao}
-                      </p>
-                    </div>
-                    
-                    <div className="mt-4 pt-4 border-t border-gray-200">
-                      <h4 className="text-sm font-medium text-gray-500 uppercase tracking-wider mb-2">
-                        Detalhes da Triagem
-                      </h4>
-                      <div className="bg-gray-50 p-4 rounded-lg">
-                        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-sm">
-                          <div>
-                            <h5 className="font-medium text-gray-700 mb-1">Condições</h5>
-                            <ul className="space-y-1 text-gray-600">
-                              <li>
-                                Diabético: {historico.consulta.triagem.diabetico ? 'Sim' : 'Não'}
-                              </li>
-                              <li>
-                                Hipertenso: {historico.consulta.triagem.hipertenso ? 'Sim' : 'Não'}
-                              </li>
-                              <li>
-                                Obeso: {historico.consulta.triagem.obeso ? 'Sim' : 'Não'}
-                              </li>
-                            </ul>
-                          </div>
-                          
-                          <div>
-                            <h5 className="font-medium text-gray-700 mb-1">Sintomas</h5>
-                            <ul className="space-y-1 text-gray-600">
-                              <li>
-                                Febre: {historico.consulta.triagem.febre ? `Sim (${historico.consulta.triagem.temperatura}°C)` : 'Não'}
-                              </li>
-                              <li>
-                                Dor: {historico.consulta.triagem.temDor ? `Sim (${historico.consulta.triagem.localDor})` : 'Não'}
-                              </li>
-                            </ul>
-                          </div>
-                          
-                          <div>
-                            <h5 className="font-medium text-gray-700 mb-1">Informações</h5>
-                            <ul className="space-y-1 text-gray-600">
-                              <li>
-                                Gravidade: <span className={
-                                  historico.consulta.triagem.gravidade === 'Crítico' 
-                                    ? 'text-red-600 font-medium' 
-                                    : historico.consulta.triagem.gravidade === 'Grave' 
-                                      ? 'text-orange-600 font-medium' 
-                                      : 'text-green-600 font-medium'
-                                }>
-                                  {historico.consulta.triagem.gravidade}
-                                </span>
-                              </li>
-                              <li>
-                                Peso: {historico.consulta.triagem.peso} kg
-                              </li>
-                              <li>
-                                Idade: {historico.consulta.triagem.idade} anos
-                              </li>
-                            </ul>
-                          </div>
+                  <div className="mt-6 pt-6 border-t border-gray-200 animate-fadeIn">
+                    <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                      {/* Diagnóstico completo */}
+                      <div>
+                        <h4 className="text-sm font-medium text-gray-500 uppercase tracking-wider mb-3">
+                          Diagnóstico Completo
+                        </h4>
+                        <div className="bg-blue-50 p-4 rounded-lg">
+                          <p className="text-gray-700 whitespace-pre-line">
+                            {historico.diagnostico || 'Diagnóstico não disponível'}
+                          </p>
+                        </div>
+                      </div>
+                      
+                      {/* Conclusão e recomendações */}
+                      <div>
+                        <h4 className="text-sm font-medium text-gray-500 uppercase tracking-wider mb-3">
+                          Conclusão e Recomendações
+                        </h4>
+                        <div className="bg-green-50 p-4 rounded-lg">
+                          <p className="text-gray-700 whitespace-pre-line">
+                            {historico.conclusao || 'Conclusão não disponível'}
+                          </p>
                         </div>
                       </div>
                     </div>
                     
-                    <div className="mt-4 text-sm text-gray-500 text-right">
-                      Histórico registrado em {formatarData(historico.criadoEm)}
-                    </div>
+                    {/* Dados do paciente */}
+                    {historico.usuario && (
+                      <div className="mt-6 pt-6 border-t border-gray-200">
+                        <h4 className="text-sm font-medium text-gray-500 uppercase tracking-wider mb-3">
+                          Dados do Paciente
+                        </h4>
+                        <div className="bg-gray-50 p-4 rounded-lg">
+                          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
+                            <div>
+                              <span className="font-medium text-gray-700">Nome:</span>
+                              <span className="ml-2 text-gray-600">{historico.usuario.nome}</span>
+                            </div>
+                            <div>
+                              <span className="font-medium text-gray-700">Email:</span>
+                              <span className="ml-2 text-gray-600">{historico.usuario.email}</span>
+                            </div>
+                            {historico.usuario.telefone && (
+                              <div>
+                                <span className="font-medium text-gray-700">Telefone:</span>
+                                <span className="ml-2 text-gray-600">{historico.usuario.telefone}</span>
+                              </div>
+                            )}
+                            {historico.usuario.endereco && (
+                              <div>
+                                <span className="font-medium text-gray-700">Endereço:</span>
+                                <span className="ml-2 text-gray-600">{historico.usuario.endereco}</span>
+                              </div>
+                            )}
+                            {historico.usuario.dataNascimento && (
+                              <div>
+                                <span className="font-medium text-gray-700">Data de Nascimento:</span>
+                                <span className="ml-2 text-gray-600">{formatarData(historico.usuario.dataNascimento)}</span>
+                              </div>
+                            )}
+                          </div>
+                        </div>
+                      </div>
+                    )}
+                    
+                    {/* Detalhes da triagem original */}
+                    {historico.consulta?.triagem && (
+                      <div className="mt-6 pt-6 border-t border-gray-200">
+                        <h4 className="text-sm font-medium text-gray-500 uppercase tracking-wider mb-3">
+                          Detalhes da Triagem Original
+                        </h4>
+                        <div className="bg-yellow-50 p-4 rounded-lg">
+                          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-sm">
+                            {/* Condições pré-existentes */}
+                            <div>
+                              <h5 className="font-medium text-gray-700 mb-2">Condições Pré-existentes</h5>
+                              <ul className="space-y-1 text-gray-600">
+                                <li className="flex items-center">
+                                  <span className={`w-2 h-2 rounded-full mr-2 ${historico.consulta.triagem.diabetico ? 'bg-red-500' : 'bg-green-500'}`}></span>
+                                  Diabético: {historico.consulta.triagem.diabetico ? 'Sim' : 'Não'}
+                                </li>
+                                <li className="flex items-center">
+                                  <span className={`w-2 h-2 rounded-full mr-2 ${historico.consulta.triagem.hipertenso ? 'bg-red-500' : 'bg-green-500'}`}></span>
+                                  Hipertenso: {historico.consulta.triagem.hipertenso ? 'Sim' : 'Não'}
+                                </li>
+                                <li className="flex items-center">
+                                  <span className={`w-2 h-2 rounded-full mr-2 ${historico.consulta.triagem.obeso ? 'bg-red-500' : 'bg-green-500'}`}></span>
+                                  Obeso: {historico.consulta.triagem.obeso ? 'Sim' : 'Não'}
+                                </li>
+                              </ul>
+                            </div>
+                            
+                            {/* Sintomas relatados */}
+                            <div>
+                              <h5 className="font-medium text-gray-700 mb-2">Sintomas Relatados</h5>
+                              <ul className="space-y-1 text-gray-600">
+                                <li className="flex items-center">
+                                  <span className={`w-2 h-2 rounded-full mr-2 ${historico.consulta.triagem.febre ? 'bg-red-500' : 'bg-green-500'}`}></span>
+                                  Febre: {historico.consulta.triagem.febre ? `Sim (${historico.consulta.triagem.temperatura}°C)` : 'Não'}
+                                </li>
+                                <li className="flex items-center">
+                                  <span className={`w-2 h-2 rounded-full mr-2 ${historico.consulta.triagem.temDor ? 'bg-red-500' : 'bg-green-500'}`}></span>
+                                  Dor: {historico.consulta.triagem.temDor ? `Sim (${historico.consulta.triagem.localDor})` : 'Não'}
+                                </li>
+                              </ul>
+                            </div>
+                            
+                            {/* Informações físicas */}
+                            <div>
+                              <h5 className="font-medium text-gray-700 mb-2">Informações Físicas</h5>
+                              <ul className="space-y-1 text-gray-600">
+                                <li>
+                                  <span className="font-medium">Gravidade:</span> 
+                                  <span className={`ml-1 px-2 py-1 rounded text-xs font-medium ${
+                                    historico.consulta.triagem.gravidade === 'Crítico' 
+                                      ? 'bg-red-100 text-red-800' 
+                                      : historico.consulta.triagem.gravidade === 'Grave' 
+                                        ? 'bg-orange-100 text-orange-800' 
+                                        : 'bg-green-100 text-green-800'
+                                  }`}>
+                                    {historico.consulta.triagem.gravidade}
+                                  </span>
+                                </li>
+                                <li>
+                                  <span className="font-medium">Peso:</span> {historico.consulta.triagem.peso} kg
+                                </li>
+                                <li>
+                                  <span className="font-medium">Idade:</span> {historico.consulta.triagem.idade} anos
+                                </li>
+                                <li>
+                                  <span className="font-medium">Pontuação:</span> {historico.consulta.triagem.pontuacao}
+                                </li>
+                                <li>
+                                  <span className="font-medium">Data da triagem:</span> {formatarData(historico.consulta.triagem.criadoEm)}
+                                </li>
+                              </ul>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    )}
                   </div>
                 )}
               </div>

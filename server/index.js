@@ -27,7 +27,7 @@ const transporter = nodemailer.createTransport({
 // Middleware
 app.use(cors({
   origin: function(origin, callback) {
-    const allowedOrigins = ['http://localhost:5173'];
+    const allowedOrigins = ['http://localhost:5173', 'http://localhost:5178'];
     if (!origin || allowedOrigins.includes(origin)) {
       callback(null, true);
     } else {
@@ -160,7 +160,7 @@ app.post('/api/auth/reset-password', async (req, res) => {
 
     // Gerar token de recuperação
     const resetToken = crypto.randomBytes(32).toString('hex');
-    const resetTokenExpiry = new Date(Date.now() + 6000); // 10 minutos
+    const resetTokenExpiry = new Date(Date.now() + 3600000); // 1 hora
 
     // Atualizar usuário com token de recuperação
     await prisma.usuario.update({
@@ -172,17 +172,17 @@ app.post('/api/auth/reset-password', async (req, res) => {
     });
 
     // Enviar e-mail
-    const resetUrl = `http://localhost:5173/reset-password?token=${resetToken}`;
+    const resetUrl = `http://localhost:5178/reset-password?token=${resetToken}`;
     await transporter.sendMail({
       from: process.env.EMAIL_USER,
       to: email,
-      subject: 'Recuperação de Senha - MedTriagem',
+      subject: 'Recuperação de Senha - TriaMed',
       html: `
         <h1>Recuperação de Senha</h1>
-        <p>Você solicitou a recuperação de senha para sua conta no MedTriagem.</p>
+        <p>Você solicitou a recuperação de senha para sua conta no TriaMed.</p>
         <p>Clique no link abaixo para redefinir sua senha:</p>
         <a href="${resetUrl}">Redefinir Senha</a>
-        <p>Este link é válido por 10 minutos.</p>
+        <p>Este link é válido por 1 hora.</p>
         <p>Se você não solicitou esta recuperação, ignore este e-mail.</p>
       `
     });
@@ -455,7 +455,7 @@ app.get('/api/usuario/consultas', autenticarToken, async (req, res) => {
   }
 });
 
-// Obter todas as consultas (admin)
+// Obter todas as consultas (admin) - INCLUINDO HISTÓRICO MÉDICO
 app.get('/api/admin/consultas', autenticarToken, async (req, res) => {
   try {
     // Verificar se é admin
@@ -473,12 +473,23 @@ app.get('/api/admin/consultas', autenticarToken, async (req, res) => {
             telefone: true
           }
         },
-        triagem: true
+        admin: {
+          select: {
+            id: true,
+            nome: true,
+            email: true
+          }
+        },
+        triagem: true,
+        historicoMedico: true // INCLUIR HISTÓRICO MÉDICO
       },
       orderBy: {
         data: 'asc'
       }
     });
+
+    console.log('Consultas carregadas:', consultas.length);
+    console.log('Consultas com histórico:', consultas.filter(c => c.historicoMedico).length);
 
     // Ajustar as datas para o fuso horário local
     const consultasAjustadas = consultas.map(consulta => ({
@@ -490,6 +501,84 @@ app.get('/api/admin/consultas', autenticarToken, async (req, res) => {
   } catch (erro) {
     console.error(erro);
     res.status(500).json({ mensagem: 'Erro no servidor', erro: erro.message });
+  }
+});
+
+// ROTA ESPECÍFICA: Obter todos os históricos médicos (admin) - NOVA IMPLEMENTAÇÃO
+app.get('/api/admin/historicos', autenticarToken, async (req, res) => {
+  try {
+    console.log('=== INICIANDO BUSCA DE HISTÓRICOS MÉDICOS ===');
+    
+    // Verificar se é admin
+    if (req.usuario.role !== 'admin') {
+      console.log('Acesso negado - usuário não é admin');
+      return res.status(403).json({ mensagem: 'Acesso não autorizado' });
+    }
+
+    // Buscar TODOS os históricos médicos diretamente da tabela HistoricoMedico
+    const historicos = await prisma.historicoMedico.findMany({
+      include: {
+        usuario: {
+          select: {
+            id: true,
+            nome: true,
+            email: true,
+            telefone: true,
+            dataNascimento: true,
+            endereco: true
+          }
+        },
+        admin: {
+          select: {
+            id: true,
+            nome: true,
+            email: true
+          }
+        },
+        consulta: {
+          include: {
+            triagem: {
+              select: {
+                id: true,
+                diabetico: true,
+                hipertenso: true,
+                obeso: true,
+                febre: true,
+                temperatura: true,
+                temDor: true,
+                localDor: true,
+                peso: true,
+                idade: true,
+                pontuacao: true,
+                gravidade: true,
+                criadoEm: true
+              }
+            }
+          }
+        }
+      },
+      orderBy: {
+        criadoEm: 'desc'
+      }
+    });
+
+    console.log('Total de históricos encontrados:', historicos.length);
+    
+    if (historicos.length > 0) {
+      console.log('Primeiro histórico:', {
+        id: historicos[0].id,
+        paciente: historicos[0].usuario?.nome,
+        diagnostico: historicos[0].diagnostico?.substring(0, 50) + '...'
+      });
+    }
+
+    res.status(200).json(historicos);
+  } catch (erro) {
+    console.error('Erro ao buscar históricos médicos:', erro);
+    res.status(500).json({ 
+      mensagem: 'Erro no servidor ao buscar históricos médicos', 
+      erro: erro.message 
+    });
   }
 });
 
@@ -522,6 +611,8 @@ app.post('/api/admin/historico-medico', autenticarToken, async (req, res) => {
         conclusao
       }
     });
+
+    console.log('Novo histórico médico criado:', historico.id);
 
     res.status(201).json({
       mensagem: 'Histórico médico registrado com sucesso',

@@ -182,7 +182,7 @@ const AdminConsultas = () => {
   return (
     <div>
       <h1 className="text-2xl font-bold text-gray-900 mb-2">Gerenciamento de Consultas</h1>
-      <p className="text-gray-600 mb-6">Visualize, filtre e registre históricos médicos de consultas</p>
+      <p className="text-gray-600 mb-6">Visualize, e registre históricos médicos de consultas</p>
       
       {error && <Alert type="error" message={error} className="mb-4" />}
       {success && <Alert type="success" message={success} className="mb-4" />}
