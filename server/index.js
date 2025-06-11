@@ -27,7 +27,7 @@ const transporter = nodemailer.createTransport({
 // Middleware
 app.use(cors({
   origin: function(origin, callback) {
-    const allowedOrigins = ['http://localhost:5173', 'http://localhost:5178'];
+    const allowedOrigins = ['http://localhost:5173'];
     if (!origin || allowedOrigins.includes(origin)) {
       callback(null, true);
     } else {
@@ -160,8 +160,10 @@ app.post('/api/auth/reset-password', async (req, res) => {
 
     // Gerar token de recuperação
     const resetToken = crypto.randomBytes(32).toString('hex');
-    const resetTokenExpiry = new Date(Date.now() + 3600000); // 1 hora
-
+    
+    // Ajustar o horário para o fuso horário local e definir expiração para 5 minutos
+    const resetTokenExpiry = new Date(Date.now() + 3600000); // 5 minutos
+    
     // Atualizar usuário com token de recuperação
     await prisma.usuario.update({
       where: { email },
@@ -172,20 +174,25 @@ app.post('/api/auth/reset-password', async (req, res) => {
     });
 
     // Enviar e-mail
-    const resetUrl = `http://localhost:5178/reset-password?token=${resetToken}`;
-    await transporter.sendMail({
-      from: process.env.EMAIL_USER,
-      to: email,
-      subject: 'Recuperação de Senha - TriaMed',
-      html: `
-        <h1>Recuperação de Senha</h1>
-        <p>Você solicitou a recuperação de senha para sua conta no TriaMed.</p>
-        <p>Clique no link abaixo para redefinir sua senha:</p>
-        <a href="${resetUrl}">Redefinir Senha</a>
-        <p>Este link é válido por 1 hora.</p>
-        <p>Se você não solicitou esta recuperação, ignore este e-mail.</p>
-      `
-    });
+    const resetUrl = `http://localhost:5173/reset-password?token=${resetToken}`;
+    try {
+      await transporter.sendMail({
+        from: process.env.EMAIL_USER,
+        to: email,
+        subject: 'Recuperação de Senha - MedTriagem',
+        html: `
+          <h1>Recuperação de Senha</h1>
+          <p>Você solicitou a recuperação de senha para sua conta no MedTriagem.</p>
+          <p>Clique no link abaixo para redefinir sua senha:</p>
+          <a href="${resetUrl}">Redefinir Senha</a>
+          <p>Este link é válido por 5 minutos.</p>
+          <p>Se você não solicitou esta recuperação, ignore este e-mail.</p>
+        `
+      });
+    } catch (emailError) {
+      console.error('Erro ao enviar e-mail:', emailError);
+      return res.status(500).json({ mensagem: 'Erro ao enviar e-mail de recuperação', erro: emailError.message });
+    }
 
     res.json({ mensagem: 'E-mail de recuperação enviado com sucesso' });
   } catch (erro) {
