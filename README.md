@@ -183,7 +183,7 @@ Esta arquitetura permite escalabilidade, manutenção simplificada e uma experi�
 
 <div align="center"  width="70%">
 
-  ![alt text](/imagens/caso%20de%20uso13.PNG)
+  ![alt text](/imagens/casodeuso.PNG)
 
 </div>
 
