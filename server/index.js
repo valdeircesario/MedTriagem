@@ -24,7 +24,7 @@ const transporter = nodemailer.createTransport({
   }
 });
 
-// Middleware
+
 app.use(cors({
   origin: function(origin, callback) {
     const allowedOrigins = ['http://localhost:5173'];

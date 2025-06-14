@@ -183,7 +183,7 @@ Esta arquitetura permite escalabilidade, manutenção simplificada e uma experi�
 
 <div align="center"  width="70%">
 
-  ![alt text](/imagens/DiagramaCasoUso.png)
+  ![alt text](/imagens/caso%20de%20uso13.PNG)
 
 </div>
 
@@ -205,7 +205,7 @@ Esta arquitetura permite escalabilidade, manutenção simplificada e uma experi�
 ## ***diagrama de sequencia***
 <div align="center"  width="70%">
 
-  ![alt text](/imagens/diagramasequen.png)
+  ![alt text](/imagens/seguencia%20011.PNG)
 
 </div>
 
@@ -752,11 +752,12 @@ Servidor rodando na porta 3001
 
 | *Tela Inicial* | *Paciente* | *Administrador* |
 |:------------:|:-------:|:---------:|
-| ![Tela Inicial 1](/imagens/login01.png) | ![Paciente 1](/imagens/user01.png) | ![Administrador 1](/imagens/admin01.png) |
+| ![Tela Inicial 1](/imagens/login01.png) | ![Paciente 1](/imagens/user01.png) | ![Administrador 1](/imagens/adminnn01.PNG) |
 | ![Tela Inicial 2](/imagens/cadastro.png) | ![Paciente 2](/imagens/user02.png) | ![Administrador 2](/imagens/admin02.png) |
 | ![Tela Inicial 3](/imagens/recuperarsenha.png) | ![Paciente 3](/imagens/user03.png) | ![Administrador 3](/imagens/admin03.png) |
 | ![Tela Inicial 4](/imagens/login01.png) | ![Paciente 4](/imagens/user05.png) | ![Administrador 4](/imagens/user06.png) |
 | ![Tela Inicial 5](/imagens/user07.png) | ![Paciente 5](/imagens/user08.png) | ![Administrador 5](/imagens/admin03.png) |
+| ![Tela Inicial 1](/imagens/adminn03.PNG) | ![Paciente 1](/imagens/adminn03.PNG) | ![Administrador 1](/imagens/adminn01.PNG) |
 
 
 
@@ -775,7 +776,7 @@ Servidor rodando na porta 3001
 
 ***Toda a documentação técnica está disponível na pasta*** `docs`:
 
-- 📘 [Documentação Completa. (PDF)](/src/docs/DOCUMENTAÇÃO_SISTEMA_DE_TRIAGEM_MÉDICA.pdf)
+- 📘 [Documentação Completa. (PDF)](/src/docs/SISTEMA%20DE%20TRIAGEM%20MÉDICA%2055.pdf)
 
 ---
 
